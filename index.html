@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="ru" data-team="ferrari" data-spoiler="recording">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0F1117">
+  <meta name="description" content="F1 Paddock & Spoiler Shield — локальный компаньон гоночного уикенда: расписание в вашем часовом поясе, защита от спойлеров, друзья в паддоке и предиктор подиума.">
+  <title>F1 Paddock &amp; Spoiler Shield</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23E10600'/%3E%3Cpath d='M32 12l14 6v10c0 10-6 16-14 20-8-4-14-10-14-20V18l14-6z' fill='none' stroke='white' stroke-width='4'/%3E%3C/svg%3E">
+  <style>html{background:#0F1117}</style>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Перейти к основному содержимому</a>
+
+  <svg class="svg-sprite" aria-hidden="true" focusable="false">
+    <symbol id="i-shield" viewBox="0 0 24 24">
+      <path d="M12 3 19 6v5.1c0 4.4-3 7.7-7 9.2-4-1.5-7-4.8-7-9.2V6l7-3Z"/>
+      <path d="M9.2 12.1 11.2 14l3.7-4"/>
+    </symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24">
+      <rect x="5" y="10.5" width="14" height="10" rx="2.4"/>
+      <path d="M8.2 10.5V8a3.8 3.8 0 0 1 7.6 0v2.5M12 14.6v2.2"/>
+    </symbol>
+    <symbol id="i-check" viewBox="0 0 24 24">
+      <path d="M5 12.4 9.6 17 19 7.5"/>
+    </symbol>
+    <symbol id="i-edit" viewBox="0 0 24 24">
+      <path d="M4 20h4.2L19 9.2a2.1 2.1 0 0 0-3-3L5.2 17 4 20Z"/>
+      <path d="m14.7 7.5 3 3"/>
+    </symbol>
+    <symbol id="i-refresh" viewBox="0 0 24 24">
+      <path d="M20 11.2A8 8 0 1 0 18.2 17"/>
+      <path d="M20 5v6.2h-6.2"/>
+    </symbol>
+    <symbol id="i-telegram" viewBox="0 0 24 24">
+      <path d="M21 4.4 2.9 11.5c-1 .4-1 1.8 0 2.2l4.4 1.5 1.7 5.1c.3.9 1.4 1.1 2 .4l2.4-2.5 4.5 3.3c.8.6 1.9.2 2.1-.8L22.9 5.6c.2-1-.8-1.7-1.9-1.2Z" fill="currentColor" stroke="none"/>
+      <path d="m8 14.5 8.6-6.6-6.3 7.3-.2 3.2" fill="rgba(0,0,0,.18)" stroke="none"/>
+    </symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="8.4"/>
+      <path d="M12 7.4V12l3.1 2"/>
+    </symbol>
+    <symbol id="i-globe" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="8.4"/>
+      <path d="M3.8 12h16.4M12 3.6c2.3 2.3 3.4 5.2 3.4 8.4S14.3 18.1 12 20.4C9.7 18.1 8.6 15.2 8.6 12S9.7 5.9 12 3.6Z"/>
+    </symbol>
+    <symbol id="i-trophy" viewBox="0 0 24 24">
+      <path d="M8 4.5h8v4.7a4 4 0 0 1-8 0V4.5Z"/>
+      <path d="M8 6H4.8v1.5A3.5 3.5 0 0 0 8.3 11M16 6h3.2v1.5A3.5 3.5 0 0 1 15.7 11M12 13.2V17M8.5 20h7M10 17h4l.7 3H9.3l.7-3Z"/>
+    </symbol>
+    <symbol id="i-flag" viewBox="0 0 24 24">
+      <path d="M5 21V4M5 4.8c4.2-2.4 9.8 2.4 14 0v8.4c-4.2 2.4-9.8-2.4-14 0"/>
+    </symbol>
+    <symbol id="i-chevron" viewBox="0 0 24 24">
+      <path d="m6.5 9.3 5.5 5.4 5.5-5.4"/>
+    </symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24">
+      <path d="M12 5v14M5 12h14"/>
+    </symbol>
+    <symbol id="i-x" viewBox="0 0 24 24">
+      <path d="m6 6 12 12M18 6 6 18"/>
+    </symbol>
+    <symbol id="i-trash" viewBox="0 0 24 24">
+      <path d="M4.5 7h15M9.5 7V4.8h5V7M7 7l.8 12.2h8.4L17 7M10.2 10.5v5.4M13.8 10.5v5.4"/>
+    </symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24">
+      <path d="M5 12h13.5M13 6.5l5.5 5.5-5.5 5.5"/>
+    </symbol>
+    <symbol id="i-calendar" viewBox="0 0 24 24">
+      <rect x="3.8" y="5.4" width="16.4" height="14.8" rx="2.4"/>
+      <path d="M3.8 10h16.4M8.2 3.4v4M15.8 3.4v4"/>
+    </symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24">
+      <path d="M12 21s6.4-5.3 6.4-10A6.4 6.4 0 0 0 5.6 11c0 4.7 6.4 10 6.4 10Z"/>
+      <circle cx="12" cy="10.8" r="2.3"/>
+    </symbol>
+    <symbol id="i-info" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="8.4"/>
+      <path d="M12 10.8v5.4M12 7.8v.2"/>
+    </symbol>
+    <symbol id="i-warning" viewBox="0 0 24 24">
+      <path d="M10.4 4.6 2.9 18a1.8 1.8 0 0 0 1.6 2.7h15a1.8 1.8 0 0 0 1.6-2.7L13.6 4.6a1.8 1.8 0 0 0-3.2 0Z"/>
+      <path d="M12 9v4.4M12 16.7v.2"/>
+    </symbol>
+    <symbol id="i-undo" viewBox="0 0 24 24">
+      <path d="M4 11.2A8 8 0 1 1 5.8 17"/>
+      <path d="M4 5v6.2h6.2"/>
+    </symbol>
+    <symbol id="i-user" viewBox="0 0 24 24">
+      <circle cx="12" cy="8" r="3.6"/>
+      <path d="M4.8 20c.5-3.6 3.4-5.6 7.2-5.6s6.7 2 7.2 5.6"/>
+    </symbol>
+  </svg>
+
+  <div class="page-aura" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <div class="shell site-header__inner">
+      <a class="brand" href="#main" aria-label="F1 Paddock and Spoiler Shield — на главную">
+        <span class="brand__mark" aria-hidden="true">
+          <span>F1</span>
+          <svg class="brand__shield"><use href="#i-shield"></use></svg>
+        </span>
+        <span class="brand__text">
+          <strong>F1 PADDOCK</strong>
+          <span>SPOILER SHIELD</span>
+        </span>
+      </a>
+
+      <div class="site-header__side">
+        <div class="source-pill" id="sourcePill" data-state="loading" title="Проверяем доступность Jolpica API">
+          <span class="source-pill__dot" aria-hidden="true"></span>
+          <span id="sourceLabel">Синхронизация…</span>
+        </div>
+
+        <div class="tz-dropdown" id="tzDropdown" title="Часовой пояс">
+          <button class="tz-chip" id="tzChip" type="button" aria-haspopup="listbox" aria-expanded="false" aria-controls="tzListbox">
+            <svg class="icon" aria-hidden="true"><use href="#i-globe"></use></svg>
+            <span id="tzLabel">Europe/Moscow</span>
+            <svg class="icon tz-chip__chevron" aria-hidden="true"><use href="#i-chevron"></use></svg>
+          </button>
+          <div class="tz-dropdown__panel" id="tzPanel" role="listbox" aria-label="Выбрать часовой пояс" hidden>
+            <input type="text" class="tz-dropdown__search" id="tzSearch" placeholder="Поиск часового пояса…" aria-label="Поиск часового пояса" autocomplete="off">
+            <div class="tz-dropdown__list" id="tzListbox" role="listbox"></div>
+          </div>
+        </div>
+
+        <span class="header-shield" id="headerShield" data-mode="recording" title="Режим Spoiler Shield">
+          <svg class="icon" aria-hidden="true"><use href="#i-shield"></use></svg>
+          <span id="headerShieldText">Щит</span>
+        </span>
+
+        <button class="profile-chip" id="profileButton" type="button" aria-haspopup="dialog" aria-label="Изменить профиль">
+          <span class="avatar avatar--profile" id="profileAvatar" aria-hidden="true">Г</span>
+          <span class="profile-chip__info">
+            <strong id="profileName">Гонщик</strong>
+            <span class="team-tag" id="profileTeam">
+              <i aria-hidden="true"></i>
+              <span id="profileTeamName">Ferrari</span>
+            </span>
+          </span>
+          <span class="profile-chip__edit" aria-hidden="true">
+            <svg class="icon"><use href="#i-edit"></use></svg>
+          </span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="shell dashboard" id="main">
+    <div class="storage-warning" id="storageWarning" hidden role="status">
+      <svg class="icon" aria-hidden="true"><use href="#i-warning"></use></svg>
+      <span>Браузер не разрешает localStorage: изменения сохранятся только до перезагрузки.</span>
+    </div>
+
+    <section class="hero-grid" aria-label="Выбранный Гран-при и статус уикенда">
+      <article class="card gp-card" aria-labelledby="gpTitle">
+        <div class="gp-card__topline">
+          <span class="round-badge"><span>R</span><b id="gpRound">20</b></span>
+          <span class="topline-sep" aria-hidden="true"></span>
+          <div class="race-picker">
+            <button class="race-picker__nav" type="button" id="prevRaceBtn" aria-label="Предыдущий этап сезона">‹</button>
+            <span class="select-wrap race-picker__wrap">
+              <select class="race-picker__select" id="raceSelect" aria-label="Выбрать этап сезона 2026"></select>
+              <svg class="select-chevron icon" aria-hidden="true"><use href="#i-chevron"></use></svg>
+            </span>
+            <button class="race-picker__nav" type="button" id="nextRaceBtn" aria-label="Следующий этап сезона">›</button>
+          </div>
+          <span class="tag tag--ghost" id="gpFormat">Классический уикенд</span>
+          <span class="gp-card__date">
+            <svg class="icon" aria-hidden="true"><use href="#i-calendar"></use></svg>
+            <span id="gpWeekend">6–8 ноября 2026</span>
+          </span>
+        </div>
+
+        <div class="gp-hero">
+          <div class="gp-hero__copy">
+            <p class="eyebrow">Этап сезона · сезон <span id="gpSeason">2026</span></p>
+            <h1 class="gp-title" id="gpTitle">Гран-при Сан-Паулу</h1>
+            <p class="gp-title-en" id="gpNameEn">São Paulo Grand Prix</p>
+            <p class="gp-circuit">
+              <svg class="icon" aria-hidden="true"><use href="#i-flag"></use></svg>
+              <span id="gpCircuit">Автодром Интерлагос</span>
+              <span class="dot-sep" aria-hidden="true">·</span>
+              <span id="gpCountry">Сан-Паулу, Бразилия</span>
+            </p>
+          </div>
+
+          <span class="gp-round-mark" id="gpRoundMark" aria-hidden="true">R20</span>
+        </div>
+
+        <dl class="gp-stats">
+          <div class="gp-stat">
+            <dt>Длина круга</dt>
+            <dd><span id="statLength">4.309</span> <small>км</small></dd>
+          </div>
+          <div class="gp-stat">
+            <dt>Кругов</dt>
+            <dd><span id="statLaps">71</span></dd>
+          </div>
+          <div class="gp-stat">
+            <dt>Поворотов</dt>
+            <dd><span id="statTurns">15</span></dd>
+          </div>
+          <div class="gp-stat">
+            <dt>Дистанция</dt>
+            <dd><span id="statDistance">305.9</span> <small>км</small></dd>
+          </div>
+        </dl>
+
+        <section class="track-section" aria-labelledby="trackSectionTitle">
+          <button class="track-visual" id="trackVisual" type="button" aria-haspopup="dialog" aria-label="Открыть карту трассы и названия поворотов">
+            <img class="track-visual__image" id="trackImage" src="assets/tracks/brazil.webp" alt="Схема трассы Интерлагос с номерами поворотов" width="1252" height="704">
+            <span class="track-visual__hint">Карта трассы ↗</span>
+          </button>
+          <div class="track-copy">
+            <p class="eyebrow">Трасса</p>
+            <h3 class="track-copy__title" id="trackSectionTitle">Автодром Интерлагос</h3>
+            <p class="track-copy__meta" id="trackSectionMeta">4.309 км · 15 поворотов · 71 круг</p>
+            <div class="track-copy__names" id="trackNamesPreview"></div>
+            <button class="btn btn--secondary btn--sm" id="trackDetailsBtn" type="button" aria-haspopup="dialog">
+              Все повороты и названия
+            </button>
+          </div>
+        </section>
+
+        <div class="sessions">
+          <div class="sessions__head">
+            <div>
+              <h2 class="sessions__title">Сессии уикенда</h2>
+              <p class="sessions__sub" id="timeModeHint">
+                <svg class="icon" aria-hidden="true"><use href="#i-clock"></use></svg>
+                <span id="timeModeLabel">Время в вашем поясе</span> ·
+                <span id="tzInline">Europe/Moscow</span>
+              </p>
+            </div>
+            <div class="time-mode" id="timeModeControl" role="group" aria-label="Отображение времени сессий">
+              <button class="time-mode__btn is-active" type="button" data-time-mode="local" aria-pressed="true">Моё время</button>
+              <button class="time-mode__btn" type="button" data-time-mode="track" aria-pressed="false">Время трассы</button>
+            </div>
+          </div>
+
+          <div class="progress">
+            <div class="progress__top">
+              <span class="progress__label">Прогресс уикенда</span>
+              <span class="progress__count"><b id="watchedCount">4</b> из <span id="watchedTotal">5</span> сессий</span>
+            </div>
+            <div class="progress__segments" id="progressBar" role="progressbar" aria-valuemin="0" aria-valuemax="5" aria-valuenow="4" aria-label="Просмотрено сессий уикенда"></div>
+            <p class="progress__hint" id="progressHint">Осталась гонка — вы успеваете.</p>
+          </div>
+
+          <ol class="session-list" id="sessionList" aria-label="Сессии Гран-при Сан-Паулу"></ol>
+        </div>
+
+        <footer class="gp-card__footer">
+          <span class="gp-source">
+            <span class="gp-source__dot" id="gpSourceDot" aria-hidden="true"></span>
+            <span id="gpSourceText">Локальный снимок расписания</span>
+          </span>
+          <button class="btn btn--ghost btn--sm" id="refreshDataBtn" type="button">
+            <svg class="icon" aria-hidden="true"><use href="#i-refresh"></use></svg>
+            Обновить данные
+          </button>
+        </footer>
+      </article>
+
+      <div class="side-stack">
+        <section class="card shield-card" aria-labelledby="shieldTitle">
+          <div class="card-head">
+            <span class="card-head__icon" aria-hidden="true">
+              <svg class="icon"><use href="#i-shield"></use></svg>
+            </span>
+            <div class="card-head__copy">
+              <p class="eyebrow">Spoiler Shield</p>
+              <h2 class="card-title" id="shieldTitle">Мой статус уикенда</h2>
+            </div>
+            <span class="status-chip" id="shieldBadge" data-mode="recording">🤫 запись</span>
+          </div>
+
+          <div class="segmented" id="statusControl" role="radiogroup" aria-label="Статус просмотра уикенда">
+            <button class="segmented__btn" type="button" role="radio" aria-checked="false" data-mode="live" aria-label="Смотрю Live, спойлеры разрешены">
+              <span class="segmented__emoji" aria-hidden="true">🟢</span>
+              <span class="segmented__label">Live</span>
+            </button>
+            <button class="segmented__btn" type="button" role="radio" aria-checked="true" data-mode="recording" aria-label="Смотрю в записи, без спойлеров">
+              <span class="segmented__emoji" aria-hidden="true">🟡</span>
+              <span class="segmented__label">Без спойлеров</span>
+            </button>
+            <button class="segmented__btn" type="button" role="radio" aria-checked="false" data-mode="watched" aria-label="Уже посмотрел, готов к разбору">
+              <span class="segmented__emoji" aria-hidden="true">🏁</span>
+              <span class="segmented__label">Посмотрел</span>
+            </button>
+          </div>
+
+          <div class="shield-detail" id="shieldDetail" data-mode="recording">
+            <span class="shield-detail__emoji" id="shieldDetailEmoji" aria-hidden="true">🤫</span>
+            <div class="shield-detail__copy">
+              <h3 id="shieldDetailTitle">Смотрю в записи</h3>
+              <p id="shieldDetailText">Результаты этапа скрыты. Друзья видят, что вам нельзя писать о гонке.</p>
+            </div>
+          </div>
+
+          <div class="shield-footer">
+            <span class="saved-note">
+              <svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg>
+              Сохранено в этом браузере
+            </span>
+            <time class="saved-time" id="statusUpdatedAt"></time>
+          </div>
+        </section>
+
+        <section class="card predictor-card" aria-labelledby="predictorTitle">
+          <div class="card-head">
+            <span class="card-head__icon" aria-hidden="true">
+              <svg class="icon"><use href="#i-trophy"></use></svg>
+            </span>
+            <div class="card-head__copy">
+              <p class="eyebrow">Предиктор</p>
+              <h2 class="card-title" id="predictorTitle">Ваш подиум</h2>
+            </div>
+            <span class="tag tag--ghost" id="predictorRound">R20</span>
+          </div>
+
+          <div id="predictionFormWrap">
+            <p class="predictor__intro">Соберите тройку сильнейших. Прогноз останется в браузере и переживёт перезагрузку.</p>
+            <form id="predictionForm" novalidate>
+              <div class="predictor__row">
+                <span class="position-medal" data-position="1" aria-hidden="true">P1</span>
+                <label class="predictor__field">
+                  <span class="field-label">Победитель</span>
+                  <span class="select-wrap">
+                    <select class="input select" id="p1Select" data-position="p1" aria-label="P1 — победитель"></select>
+                    <svg class="select-chevron icon" aria-hidden="true"><use href="#i-chevron"></use></svg>
+                  </span>
+                </label>
+              </div>
+              <div class="predictor__row">
+                <span class="position-medal" data-position="2" aria-hidden="true">P2</span>
+                <label class="predictor__field">
+                  <span class="field-label">Второе место</span>
+                  <span class="select-wrap">
+                    <select class="input select" id="p2Select" data-position="p2" aria-label="P2 — второе место"></select>
+                    <svg class="select-chevron icon" aria-hidden="true"><use href="#i-chevron"></use></svg>
+                  </span>
+                </label>
+              </div>
+              <div class="predictor__row">
+                <span class="position-medal" data-position="3" aria-hidden="true">P3</span>
+                <label class="predictor__field">
+                  <span class="field-label">Третье место</span>
+                  <span class="select-wrap">
+                    <select class="input select" id="p3Select" data-position="p3" aria-label="P3 — третье место"></select>
+                    <svg class="select-chevron icon" aria-hidden="true"><use href="#i-chevron"></use></svg>
+                  </span>
+                </label>
+              </div>
+              <p class="form-hint" id="predictionHint">Выберите трёх разных пилотов.</p>
+              <button class="btn btn--accent btn--block" id="savePredictionBtn" type="submit">
+                Зафиксировать прогноз
+                <svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg>
+              </button>
+            </form>
+          </div>
+
+          <div class="saved-prediction" id="savedPrediction" hidden></div>
+        </section>
+
+        <section class="card results results-card" id="resultsPanel" aria-labelledby="resultsTitle">
+          <div class="results__head">
+            <div>
+              <p class="eyebrow">Итоги этапа</p>
+              <h2 class="results__title" id="resultsTitle">Подиум гонки</h2>
+            </div>
+            <span class="tag tag--source">
+              <svg class="icon" aria-hidden="true"><use href="#i-info"></use></svg>
+              <span id="resultsNote">Formula 1</span>
+            </span>
+          </div>
+
+          <div class="results__body" id="resultsBody"></div>
+
+          <div class="results__veil" id="resultsVeil">
+            <span class="results__veil-icon" aria-hidden="true">
+              <svg class="icon"><use href="#i-lock"></use></svg>
+            </span>
+            <strong id="resultsVeilTitle">Результаты скрыты</strong>
+            <p id="resultsVeilText">Spoiler Shield активен: вы смотрите уикенд в записи.</p>
+            <button class="btn btn--secondary btn--sm" id="revealResultsBtn" type="button" data-results-action="open">
+              Открыть итоги
+            </button>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <section class="card friends" aria-labelledby="friendsTitle">
+      <div class="section-head">
+        <div class="section-head__copy">
+          <p class="eyebrow">Paddock Friends</p>
+          <h2 class="section-title" id="friendsTitle">
+            Друзья в паддоке
+            <span class="friends-count" id="friendsCount">3</span>
+          </h2>
+          <p class="section-sub">Статус друга защищает ваш уикенд от случайных спойлеров. Чат с теми, кто смотрит в записи, закрыт.</p>
+        </div>
+        <div class="legend" aria-label="Легенда статусов друзей">
+          <span class="legend__item" data-mode="live"><i aria-hidden="true"></i> Live</span>
+          <span class="legend__item" data-mode="recording"><i aria-hidden="true"></i> Без спойлеров</span>
+          <span class="legend__item" data-mode="watched"><i aria-hidden="true"></i> Посмотрел</span>
+        </div>
+      </div>
+
+      <div class="friends-grid" id="friendsGrid"></div>
+
+      <form class="add-friend" id="friendForm" novalidate>
+        <div class="add-friend__head">
+          <span class="add-friend__plus" aria-hidden="true">
+            <svg class="icon"><use href="#i-plus"></use></svg>
+          </span>
+          <div>
+            <h3>Добавить друга</h3>
+            <p>Сохранится только в этом браузере</p>
+          </div>
+        </div>
+
+        <div class="friend-form__grid">
+          <label class="field">
+            <span class="field-label">Имя</span>
+            <input class="input" type="text" id="friendName" name="friendName" placeholder="Например, Ника" maxlength="24" autocomplete="off" required aria-describedby="friendError" aria-invalid="false">
+          </label>
+          <label class="field">
+            <span class="field-label">Telegram</span>
+            <input class="input" type="text" id="friendTg" name="friendTg" placeholder="@nickname" maxlength="33" autocomplete="off" required aria-describedby="friendError" aria-invalid="false">
+          </label>
+          <label class="field">
+            <span class="field-label">Статус</span>
+            <span class="select-wrap">
+              <select class="input select" id="friendStatus" name="friendStatus">
+                <option value="live">🟢 Смотрит Live</option>
+                <option value="recording">🟡 Без спойлеров</option>
+                <option value="watched">🏁 Уже посмотрел</option>
+              </select>
+              <svg class="select-chevron icon" aria-hidden="true"><use href="#i-chevron"></use></svg>
+            </span>
+          </label>
+          <button class="btn btn--accent friend-form__submit" type="submit">
+            <svg class="icon" aria-hidden="true"><use href="#i-plus"></use></svg>
+            Добавить в паддок
+          </button>
+        </div>
+        <p class="form-error" id="friendError" role="alert" hidden></p>
+      </form>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="shell site-footer__inner">
+      <div class="footer-brand">
+        <span class="footer-brand__mark" aria-hidden="true">F1</span>
+        <div>
+          <strong>F1 Paddock &amp; Spoiler Shield</strong>
+          <p>Локальный компаньон уикенда. Данные не покидают ваш браузер.</p>
+        </div>
+      </div>
+      <div class="footer-meta">
+        <span><i class="dot dot--live" aria-hidden="true"></i> localStorage</span>
+        <span><svg class="icon" aria-hidden="true"><use href="#i-globe"></use></svg> Jolpica API · fallback</span>
+        <span>Сезон 2026</span>
+      </div>
+      <p class="footer-disclaimer">
+        Демо-проект. Не связан с Formula 1. Расписание сессий и официальные подиумы — по данным сезона 2026; источник можно заменить в <code>js/data.js</code>.
+      </p>
+    </div>
+  </footer>
+
+  <dialog class="track-dialog" id="trackDialog" aria-labelledby="trackDialogTitle" aria-describedby="trackDialogMeta">
+    <div class="track-dialog__head">
+      <div>
+        <p class="eyebrow">Схема трассы</p>
+        <h2 class="track-dialog__title" id="trackDialogTitle">Автодром Интерлагос</h2>
+        <p class="track-dialog__meta" id="trackDialogMeta">4.309 км · 15 поворотов · 71 круг</p>
+      </div>
+      <button class="icon-btn" type="button" id="closeTrackBtn" aria-label="Закрыть карту трассы">
+        <svg class="icon" aria-hidden="true"><use href="#i-x"></use></svg>
+      </button>
+    </div>
+
+    <div class="track-dialog__map">
+      <img id="trackDialogImage" src="assets/tracks/brazil.webp" alt="Схема трассы Интерлагос с номерами поворотов" width="1252" height="704">
+    </div>
+
+    <div class="track-dialog__legend" id="trackDialogLegend"></div>
+    <p class="track-dialog__note" id="trackDialogNote"></p>
+    <p class="track-dialog__source">
+      Схема с номерами поворотов: Formula 1. Названия поворотов: Formula 1, Wikipedia, RacingCircuits.info, JetPunk.
+    </p>
+  </dialog>
+
+  <div class="modal" id="profileModal" hidden>
+    <div class="modal__backdrop" data-close-modal="profileModal"></div>
+    <div class="modal__dialog" role="dialog" aria-modal="true" aria-labelledby="profileModalTitle" aria-describedby="profileModalDesc" tabindex="-1">
+      <div class="modal__head">
+        <div>
+          <p class="eyebrow" id="profileModalEyebrow">Mock-авторизация</p>
+          <h2 class="modal__title" id="profileModalTitle">Вход в паддок</h2>
+        </div>
+        <button class="icon-btn" type="button" id="closeProfileBtn" aria-label="Закрыть окно профиля" data-close-modal="profileModal">
+          <svg class="icon" aria-hidden="true"><use href="#i-x"></use></svg>
+        </button>
+      </div>
+      <p class="modal__desc" id="profileModalDesc">Представьтесь и выберите команду. Это mock-вход: без пароля, e-mail и сервера.</p>
+
+      <form id="profileForm" novalidate>
+        <label class="field">
+          <span class="field-label">Никнейм</span>
+          <input class="input" type="text" id="profileNameInput" name="profileName" placeholder="Как вас зовут на пит-лейне?" maxlength="24" autocomplete="nickname" required aria-describedby="profileNameError" aria-invalid="false">
+          <span class="field__error" id="profileNameError" role="alert" hidden></span>
+        </label>
+
+        <fieldset class="team-picker">
+          <legend class="field-label">Любимая команда</legend>
+          <div class="team-grid" id="teamGrid"></div>
+          <p class="field__hint">Цвет команды станет акцентом интерфейса.</p>
+        </fieldset>
+
+        <div class="modal__actions">
+          <button class="btn btn--ghost" type="button" id="skipProfileBtn">Пропустить</button>
+          <button class="btn btn--accent" type="submit" id="saveProfileBtn">
+            Войти в паддок
+          </button>
+        </div>
+      </form>
+
+      <p class="modal__note">
+        <svg class="icon" aria-hidden="true"><use href="#i-lock"></use></svg>
+        Mock-авторизация без пароля. Имя и команда хранятся только в localStorage вашего браузера.
+      </p>
+    </div>
+  </div>
+
+  <div class="toast-region" id="toastRegion" aria-live="polite" aria-atomic="false"></div>
+
+  <noscript>
+    <div class="noscript">Для работы приложения нужен JavaScript. Включите его в настройках браузера.</div>
+  </noscript>
+
+  <script src="js/data.js"></script>
+  <script src="js/tracks.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
