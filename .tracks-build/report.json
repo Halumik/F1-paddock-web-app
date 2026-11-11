@@ -1,0 +1,279 @@
+{
+  "australia": {
+    "file": "Albert Park Circuit 2021.svg",
+    "size": 187576,
+    "texts": 36,
+    "numbers": 19,
+    "sample": [
+      "1823 ft (556 m)",
+      "Length of black layout:3.281 mi (5.280 km)",
+      "Map based on data from April 1st, 2021",
+      "N",
+      "1",
+      "2",
+      "3",
+      "F1 Sectors:",
+      "16",
+      "4",
+      "5",
+      "7"
+    ]
+  },
+  "china": {
+    "file": "Shanghai International Racing Circuit track map.svg",
+    "size": 51017,
+    "texts": 18,
+    "numbers": 16,
+    "sample": [
+      "1360 ft (415 m)",
+      "N",
+      "2",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "12",
+      "13",
+      "16",
+      "1"
+    ]
+  },
+  "japan": {
+    "file": "Suzuka circuit map--2005.svg",
+    "size": 65754,
+    "texts": 30,
+    "numbers": 18,
+    "sample": [
+      "Map based on data from May 17, 2005",
+      "1786 ft (544 m)",
+      "N",
+      "Length of black layout:3.6135 mi (5.8153 km)",
+      "As of 2005",
+      "First Turn",
+      "'S' Curves",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7"
+    ]
+  },
+  "miami": {
+    "file": "Hard Rock Stadium Circuit 2022.svg",
+    "size": 31497,
+    "texts": 2,
+    "numbers": 2,
+    "sample": [
+      "17",
+      "18"
+    ]
+  },
+  "canada": {
+    "file": "Circuit Gilles Villeneuve.svg",
+    "size": 23384,
+    "texts": 19,
+    "numbers": 14,
+    "sample": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "10",
+      "11",
+      "12"
+    ]
+  },
+  "monaco": {
+    "file": "Monte Carlo Formula 1 track map.svg",
+    "size": 159579,
+    "texts": 36,
+    "numbers": 19,
+    "sample": [
+      "887 ft (270 m)",
+      "N",
+      "1",
+      "Sainte Devote",
+      "2",
+      "Beau Rivage",
+      "3",
+      "Massenet",
+      "4",
+      "Casino",
+      "5",
+      "Mirabeau Haute"
+    ]
+  },
+  "barcelona": {
+    "file": "Formula1 Circuit Catalunya 2021.svg",
+    "error": "HTTP Error 429: Too many requests (76af2b0)"
+  },
+  "austria": {
+    "file": "Spielberg bare map numbers contextless 2021 corner names.svg",
+    "size": 55523,
+    "texts": 22,
+    "numbers": 10,
+    "sample": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "10",
+      "N",
+      "S1"
+    ]
+  },
+  "britain": {
+    "file": "Circuit Silverstone 2011.svg",
+    "error": "HTTP Error 429: Too many requests (76af2b0)"
+  },
+  "belgium": {
+    "file": "Spa-Francorchamps of Belgium.svg",
+    "error": "'charmap' codec can't encode character '\\xe8' in position 61: character maps to <undefined>"
+  },
+  "hungary": {
+    "file": "Hungaroring2026.svg",
+    "error": "HTTP Error 429: Too many requests (76af2b0)"
+  },
+  "netherlands": {
+    "file": "Circuit Zandvoort 2020.svg",
+    "error": "HTTP Error 404: Not Found"
+  },
+  "italy": {
+    "file": "Monza track map.svg",
+    "size": 49520,
+    "texts": 34,
+    "numbers": 13,
+    "sample": [
+      "principi",
+      "start",
+      "fin",
+      "finish",
+      "Curva delSaragli",
+      "Curva delSerraglio",
+      "2ª VariantVariant dela Ronsgia",
+      "2º Variante(Variante della Roggia)",
+      "Variant Ascari",
+      "Variante Ascari",
+      "CurvaParabolega",
+      "CurvaParabolica"
+    ]
+  },
+  "spain": {
+    "file": "Madring circuit map.svg",
+    "error": "HTTP Error 404: Not Found"
+  },
+  "azerbaijan": {
+    "file": "Baku Formula One circuit map.svg",
+    "size": 96105,
+    "texts": 22,
+    "numbers": 20,
+    "sample": [
+      "20",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "10",
+      "11"
+    ]
+  },
+  "bahrain": {
+    "file": "Sepang.svg",
+    "error": "HTTP Error 429: Too many requests (76af2b0)"
+  },
+  "singapore": {
+    "file": "Marina Bay circuit 2023.svg",
+    "size": 35680,
+    "texts": 25,
+    "numbers": 19,
+    "sample": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "10",
+      "11",
+      "12"
+    ]
+  },
+  "usa": {
+    "file": "Austin circuit.svg",
+    "error": "HTTP Error 429: Too many requests (76af2b0)"
+  },
+  "mexico": {
+    "file": "Autódromo Hermanos Rodríguez 2015.svg",
+    "size": 13653,
+    "texts": 17,
+    "numbers": 17,
+    "sample": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "10",
+      "12",
+      "13"
+    ]
+  },
+  "brazil": {
+    "file": "Circuit Interlagos.svg",
+    "error": "HTTP Error 429: Too many requests (76af2b0)"
+  },
+  "lasvegas": {
+    "file": "2023 Las Vegas street circuit.svg",
+    "size": 83721,
+    "texts": 22,
+    "numbers": 17,
+    "sample": [
+      "N",
+      "Koval Lane",
+      "5",
+      "10",
+      "11",
+      "12",
+      "13",
+      "17",
+      "MSGSphere",
+      "Las Vegas Boulevard (The Strip)",
+      "Harmon Avenue",
+      "14"
+    ]
+  },
+  "qatar": {
+    "file": "Lusail International Circuit 2023.svg",
+    "error": "HTTP Error 429: Too many requests (76af2b0)"
+  },
+  "abudhabi": {
+    "file": "Circuit Yas-Island.svg",
+    "size": 31316,
+    "texts": 0,
+    "numbers": 0,
+    "sample": []
+  }
+}

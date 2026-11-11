@@ -1,0 +1,427 @@
+{
+  "australia": {
+    "title": "Melbourne Grand Prix Circuit",
+    "svg": {
+      "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0a/Albert_Park_Circuit_2021.svg/250px-Albert_Park_Circuit_2021.svg.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+      "alt": ""
+    },
+    "candidates": [
+      {
+        "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0a/Albert_Park_Circuit_2021.svg/250px-Albert_Park_Circuit_2021.svg.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+        "alt": ""
+      },
+      {
+        "src": "https://maps.wikimedia.org/img/osm-intl,13,-37.8459,144.9698,300x200.png?lang=en&domain=en.wikipedia.org&title=Albert_Park_Circuit&revid=1384274868&groups=_8370b21386daf14549f66c5cd3810fa332f235a7&parser=parsoid",
+        "alt": "Map"
+      }
+    ]
+  },
+  "china": {
+    "title": "Shanghai International Circuit",
+    "svg": {
+      "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/14/Shanghai_International_Racing_Circuit_track_map.svg/250px-Shanghai_International_Racing_Circuit_track_map.svg.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+      "alt": ""
+    },
+    "candidates": [
+      {
+        "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/14/Shanghai_International_Racing_Circuit_track_map.svg/250px-Shanghai_International_Racing_Circuit_track_map.svg.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+        "alt": ""
+      },
+      {
+        "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/14/Shanghai_International_Racing_Circuit_track_map.svg/250px-Shanghai_International_Racing_Circuit_track_map.svg.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+        "alt": ""
+      },
+      {
+        "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/52/Shanghai_International_Circuit_moto_map.svg/250px-Shanghai_International_Circuit_moto_map.svg.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+        "alt": ""
+      },
+      {
+        "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6b/Shanghai_International_Circuit_wtcc.png/250px-Shanghai_International_Circuit_wtcc.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+        "alt": ""
+      }
+    ]
+  },
+  "japan": {
+    "title": "Suzuka International Racing Course",
+    "svg": {
+      "src": "https://thumb.wikimedia.org/wikipedia/en/thumb/a/a4/Suzuka_Circuit_logo_%282022%29.svg/250px-Suzuka_Circuit_logo_%282022%29.svg.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+      "alt": ""
+    },
+    "candidates": [
+      {
+        "src": "https://thumb.wikimedia.org/wikipedia/en/thumb/a/a4/Suzuka_Circuit_logo_%282022%29.svg/250px-Suzuka_Circuit_logo_%282022%29.svg.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+        "alt": ""
+      },
+      {
+        "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ec/Suzuka_circuit_map--2005.svg/330px-Suzuka_circuit_map--2005.svg.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+        "alt": ""
+      },
+      {
+        "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/83/Symbol_template_class_pink.svg/20px-Symbol_template_class_pink.svg.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+        "alt": ""
+      },
+      {
+        "src": "https://thumb.wikimedia.org/wikipedia/en/thumb/4/4a/Commons-logo.svg/20px-Commons-logo.svg.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+        "alt": ""
+      }
+    ]
+  },
+  "miami": {
+    "title": "Miami International Autodrome",
+    "svg": {
+      "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/49/Hard_Rock_Stadium_Circuit_2022.svg/250px-Hard_Rock_Stadium_Circuit_2022.svg.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+      "alt": ""
+    },
+    "candidates": [
+      {
+        "src": "https://thumb.wikimedia.org/wikipedia/en/thumb/4/45/Miami_International_Autodrome_Logo.png/250px-Miami_International_Autodrome_Logo.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+        "alt": ""
+      },
+      {
+        "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/49/Hard_Rock_Stadium_Circuit_2022.svg/250px-Hard_Rock_Stadium_Circuit_2022.svg.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+        "alt": ""
+      }
+    ]
+  },
+  "canada": {
+    "title": "Circuit Gilles Villeneuve",
+    "svg": {
+      "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f9/%C3%8Ele_Notre-Dame_%28Circuit_Gilles_Villeneuve%29.svg/330px-%C3%8Ele_Notre-Dame_%28Circuit_Gilles_Villeneuve%29.svg.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+      "alt": ""
+    },
+    "candidates": [
+      {
+        "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f9/%C3%8Ele_Notre-Dame_%28Circuit_Gilles_Villeneuve%29.svg/330px-%C3%8Ele_Notre-Dame_%28Circuit_Gilles_Villeneuve%29.svg.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+        "alt": ""
+      }
+    ]
+  },
+  "monaco": {
+    "title": "Circuit de Monaco",
+    "svg": {
+      "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/36/Monte_Carlo_Formula_1_track_map.svg/250px-Monte_Carlo_Formula_1_track_map.svg.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+      "alt": ""
+    },
+    "candidates": [
+      {
+        "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/36/Monte_Carlo_Formula_1_track_map.svg/250px-Monte_Carlo_Formula_1_track_map.svg.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+        "alt": ""
+      },
+      {
+        "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/36/Monte_Carlo_Formula_1_track_map.svg/250px-Monte_Carlo_Formula_1_track_map.svg.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+        "alt": ""
+      },
+      {
+        "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f4/Circuit_Monaco_Formula_E_2021.png/250px-Circuit_Monaco_Formula_E_2021.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+        "alt": ""
+      },
+      {
+        "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e5/M%C3%B3naco_ePrix.svg/250px-M%C3%B3naco_ePrix.svg.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+        "alt": ""
+      }
+    ]
+  },
+  "barcelona": {
+    "title": "Circuit de Barcelona-Catalunya",
+    "svg": {
+      "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/87/Circuit_de_Catalunya_moto_2021.svg/250px-Circuit_de_Catalunya_moto_2021.svg.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+      "alt": ""
+    },
+    "candidates": [
+      {
+        "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/87/Circuit_de_Catalunya_moto_2021.svg/250px-Circuit_de_Catalunya_moto_2021.svg.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+        "alt": ""
+      },
+      {
+        "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/26/Formula1_Circuit_Catalunya_2021.svg/250px-Formula1_Circuit_Catalunya_2021.svg.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+        "alt": ""
+      },
+      {
+        "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5c/Olympic_rings_without_rims.svg/40px-Olympic_rings_without_rims.svg.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+        "alt": ""
+      },
+      {
+        "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3c/BCN-EstadiOlimpic-4860.jpg/120px-BCN-EstadiOlimpic-4860.jpg?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+        "alt": ""
+      }
+    ]
+  },
+  "austria": {
+    "title": "Red Bull Ring",
+    "svg": {
+      "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4e/Spielberg_bare_map_numbers_contextless_2021_corner_names.svg/250px-Spielberg_bare_map_numbers_contextless_2021_corner_names.svg.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+      "alt": ""
+    },
+    "candidates": [
+      {
+        "src": "https://thumb.wikimedia.org/wikipedia/en/thumb/8/86/Logo_for_Red_Bull_Ring.png/250px-Logo_for_Red_Bull_Ring.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+        "alt": ""
+      },
+      {
+        "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4e/Spielberg_bare_map_numbers_contextless_2021_corner_names.svg/250px-Spielberg_bare_map_numbers_contextless_2021_corner_names.svg.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+        "alt": ""
+      },
+      {
+        "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/36/Red_Bull_Ring_moto_2022.svg/250px-Red_Bull_Ring_moto_2022.svg.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+        "alt": ""
+      },
+      {
+        "src": "https://thumb.wikimedia.org/wikipedia/en/thumb/9/99/Question_book-new.svg/60px-Question_book-new.svg.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+        "alt": "icon"
+      }
+    ]
+  },
+  "britain": {
+    "title": "Silverstone Circuit",
+    "svg": {
+      "src": "https://thumb.wikimedia.org/wikipedia/en/thumb/f/f2/Edit-clear.svg/40px-Edit-clear.svg.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+      "alt": ""
+    },
+    "candidates": [
+      {
+        "src": "https://thumb.wikimedia.org/wikipedia/en/thumb/f/f2/Edit-clear.svg/40px-Edit-clear.svg.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+        "alt": ""
+      },
+      {
+        "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/27/Silverstone_Circuit_logo.png/250px-Silverstone_Circuit_logo.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+        "alt": ""
+      },
+      {
+        "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/ca/Circuit_Silverstone_2011.svg/250px-Circuit_Silverstone_2011.svg.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+        "alt": ""
+      }
+    ]
+  },
+  "belgium": {
+    "title": "Circuit de Spa-Francorchamps",
+    "svg": {
+      "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/06/Logo_Circuit_de_Spa_Francorchamps.svg/330px-Logo_Circuit_de_Spa_Francorchamps.svg.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+      "alt": ""
+    },
+    "candidates": [
+      {
+        "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/06/Logo_Circuit_de_Spa_Francorchamps.svg/330px-Logo_Circuit_de_Spa_Francorchamps.svg.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+        "alt": ""
+      },
+      {
+        "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/54/Spa-Francorchamps_of_Belgium.svg/330px-Spa-Francorchamps_of_Belgium.svg.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+        "alt": ""
+      },
+      {
+        "src": "https://thumb.wikimedia.org/wikipedia/en/thumb/9/99/Question_book-new.svg/60px-Question_book-new.svg.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+        "alt": "icon"
+      }
+    ]
+  },
+  "hungary": {
+    "title": "Hungaroring",
+    "svg": {
+      "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6e/Hungaroring2026.svg/330px-Hungaroring2026.svg.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+      "alt": ""
+    },
+    "candidates": [
+      {
+        "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d4/Logo_for_Hungaroring.png/250px-Logo_for_Hungaroring.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+        "alt": ""
+      },
+      {
+        "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6e/Hungaroring2026.svg/330px-Hungaroring2026.svg.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+        "alt": ""
+      },
+      {
+        "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6e/Hungaroring2026.svg/330px-Hungaroring2026.svg.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+        "alt": ""
+      },
+      {
+        "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3b/Hungaroring_circuit_1989-2002.svg/330px-Hungaroring_circuit_1989-2002.svg.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+        "alt": ""
+      }
+    ]
+  },
+  "netherlands": {
+    "title": "Circuit Zandvoort",
+    "svg": null,
+    "candidates": [
+      {
+        "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/78/Zandvoort_Circuit.png/250px-Zandvoort_Circuit.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+        "alt": ""
+      }
+    ]
+  },
+  "italy": {
+    "title": "Autodromo Nazionale Monza",
+    "svg": {
+      "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f8/Monza_track_map.svg/330px-Monza_track_map.svg.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+      "alt": ""
+    },
+    "candidates": [
+      {
+        "src": "https://thumb.wikimedia.org/wikipedia/en/thumb/f/f1/Autodromo_Nazionale_Monza_circuit_logo.png/250px-Autodromo_Nazionale_Monza_circuit_logo.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+        "alt": ""
+      },
+      {
+        "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f8/Monza_track_map.svg/330px-Monza_track_map.svg.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+        "alt": ""
+      }
+    ]
+  },
+  "spain": {
+    "title": "Madring",
+    "svg": {
+      "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9d/MADRING_logo_horizontal.svg/250px-MADRING_logo_horizontal.svg.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+      "alt": ""
+    },
+    "candidates": [
+      {
+        "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9d/MADRING_logo_horizontal.svg/250px-MADRING_logo_horizontal.svg.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+        "alt": ""
+      },
+      {
+        "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/25/Madring_%282026%29.svg/250px-Madring_%282026%29.svg.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+        "alt": ""
+      }
+    ]
+  },
+  "azerbaijan": {
+    "title": "Baku City Circuit",
+    "svg": {
+      "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f1/Baku_Formula_One_circuit_map.svg/330px-Baku_Formula_One_circuit_map.svg.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+      "alt": ""
+    },
+    "candidates": [
+      {
+        "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f1/Baku_Formula_One_circuit_map.svg/330px-Baku_Formula_One_circuit_map.svg.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+        "alt": ""
+      }
+    ]
+  },
+  "bahrain": {
+    "title": "Sepang International Circuit",
+    "svg": {
+      "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/67/Sepang.svg/250px-Sepang.svg.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+      "alt": ""
+    },
+    "candidates": [
+      {
+        "src": "https://thumb.wikimedia.org/wikipedia/en/thumb/d/da/Petronas_Sepang_International_Circuit_logo.png/250px-Petronas_Sepang_International_Circuit_logo.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+        "alt": ""
+      },
+      {
+        "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/67/Sepang.svg/250px-Sepang.svg.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+        "alt": ""
+      }
+    ]
+  },
+  "singapore": {
+    "title": "Marina Bay Street Circuit",
+    "svg": {
+      "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/8b/Marina_Bay_circuit_2023.svg/250px-Marina_Bay_circuit_2023.svg.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+      "alt": ""
+    },
+    "candidates": [
+      {
+        "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/8b/Marina_Bay_circuit_2023.svg/250px-Marina_Bay_circuit_2023.svg.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+        "alt": ""
+      }
+    ]
+  },
+  "usa": {
+    "title": "Circuit of the Americas",
+    "svg": {
+      "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/23/Circuit_of_the_Americas_logo.svg/250px-Circuit_of_the_Americas_logo.svg.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+      "alt": "Circuit of the Americas"
+    },
+    "candidates": [
+      {
+        "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/23/Circuit_of_the_Americas_logo.svg/250px-Circuit_of_the_Americas_logo.svg.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+        "alt": "Circuit of the Americas"
+      },
+      {
+        "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a5/Austin_circuit.svg/250px-Austin_circuit.svg.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+        "alt": ""
+      },
+      {
+        "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/fb/COTA_NASCAR_Layout.png/250px-COTA_NASCAR_Layout.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+        "alt": ""
+      },
+      {
+        "src": "https://maps.wikimedia.org/img/osm-intl,13,a,a,250x200.png?lang=en&domain=en.wikipedia.org&title=Circuit_of_the_Americas&revid=1384552572&groups=_2bbf06f44d2ff2771d843cf3385fca6ba4eb679f&parser=parsoid",
+        "alt": "Map"
+      }
+    ]
+  },
+  "mexico": {
+    "title": "Autódromo Hermanos Rodríguez",
+    "svg": {
+      "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/36/Aut%C3%B3dromo_Hermanos_Rodr%C3%ADguez_2015.svg/250px-Aut%C3%B3dromo_Hermanos_Rodr%C3%ADguez_2015.svg.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+      "alt": ""
+    },
+    "candidates": [
+      {
+        "src": "https://thumb.wikimedia.org/wikipedia/en/thumb/0/08/Autodromo_Hermanos_Rodriguez_2017_logo.gif/250px-Autodromo_Hermanos_Rodriguez_2017_logo.gif?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+        "alt": ""
+      },
+      {
+        "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/36/Aut%C3%B3dromo_Hermanos_Rodr%C3%ADguez_2015.svg/250px-Aut%C3%B3dromo_Hermanos_Rodr%C3%ADguez_2015.svg.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+        "alt": ""
+      },
+      {
+        "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/10/Aut%C3%B3dromo_Hermanos_Rodr%C3%ADguez_FormulaE_2020.svg/250px-Aut%C3%B3dromo_Hermanos_Rodr%C3%ADguez_FormulaE_2020.svg.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+        "alt": ""
+      },
+      {
+        "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/93/Autodromo_Hermanos_Rodriguez_%28National_Circuit_with_Foro_Sol%29.png/250px-Autodromo_Hermanos_Rodriguez_%28National_Circuit_with_Foro_Sol%29.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+        "alt": ""
+      }
+    ]
+  },
+  "brazil": {
+    "title": "Interlagos Circuit",
+    "svg": {
+      "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/cf/Aut%C3%B3dromo_Jos%C3%A9_Carlos_Pace_%28AKA_Interlagos%29_track_map.svg/330px-Aut%C3%B3dromo_Jos%C3%A9_Carlos_Pace_%28AKA_Interlagos%29_track_map.svg.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+      "alt": ""
+    },
+    "candidates": [
+      {
+        "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/cf/Aut%C3%B3dromo_Jos%C3%A9_Carlos_Pace_%28AKA_Interlagos%29_track_map.svg/330px-Aut%C3%B3dromo_Jos%C3%A9_Carlos_Pace_%28AKA_Interlagos%29_track_map.svg.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+        "alt": ""
+      }
+    ]
+  },
+  "lasvegas": {
+    "title": "Las Vegas Strip Circuit",
+    "svg": {
+      "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/43/2023_Las_Vegas_street_circuit.svg/250px-2023_Las_Vegas_street_circuit.svg.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+      "alt": ""
+    },
+    "candidates": [
+      {
+        "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/43/2023_Las_Vegas_street_circuit.svg/250px-2023_Las_Vegas_street_circuit.svg.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+        "alt": ""
+      }
+    ]
+  },
+  "qatar": {
+    "title": "Lusail International Circuit",
+    "svg": {
+      "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c7/Lusail_International_Circuit_2023.svg/250px-Lusail_International_Circuit_2023.svg.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+      "alt": ""
+    },
+    "candidates": [
+      {
+        "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c7/Lusail_International_Circuit_2023.svg/250px-Lusail_International_Circuit_2023.svg.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+        "alt": ""
+      }
+    ]
+  },
+  "abudhabi": {
+    "title": "Yas Marina Circuit",
+    "svg": null,
+    "candidates": [
+      {
+        "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b0/Yas_Marina_Circuit.png/250px-Yas_Marina_Circuit.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
+        "alt": ""
+      }
+    ]
+  }
+}
