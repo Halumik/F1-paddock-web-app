@@ -1,10 +1,10 @@
 /**
- * F1 Paddock & Spoiler Shield — слой хранения.
+ * F1 Paddock — слой хранения.
  * Данные живут в localStorage под ключами f1_*. Если storage недоступен
  * (приватный режим, жёсткие настройки), используется прозрачный memory-fallback.
  *
  * Схема v2: сессии и прогнозы хранятся по каждому этапу, выбранный этап
- * и настройки интерфейса — отдельно. Старые плоские данные мигрируются.
+ * и настройки интерфейса (включая тему) — отдельно. Старые плоские данные мигрируются.
  */
 (function () {
   'use strict';
@@ -270,7 +270,8 @@
   function normalizePrefs(raw) {
     var timeMode = raw && raw.timeMode === 'track' ? 'track' : 'local';
     var userTimezone = raw && typeof raw.userTimezone === 'string' ? raw.userTimezone : null;
-    return { timeMode: timeMode, userTimezone: userTimezone };
+    var theme = raw && raw.theme === 'light' ? 'light' : 'dark';
+    return { timeMode: timeMode, userTimezone: userTimezone, theme: theme };
   }
 
   function seedIfMissing() {
@@ -300,7 +301,7 @@
       writeRaw(KEYS.friends, JSON.stringify(clone((DATA && DATA.defaultFriends) || [])));
     }
     if (readRaw(KEYS.prefs) === null) {
-      writeRaw(KEYS.prefs, JSON.stringify({ timeMode: 'local', userTimezone: null }));
+      writeRaw(KEYS.prefs, JSON.stringify({ timeMode: 'local', userTimezone: null, theme: 'dark' }));
     }
     // f1_predictions и f1_selected_race создаются по действию пользователя.
   }
@@ -403,7 +404,8 @@
       var current = this.loadPrefs();
       var next = normalizePrefs({
         timeMode: patch && patch.timeMode !== undefined ? patch.timeMode : current.timeMode,
-        userTimezone: patch && patch.userTimezone !== undefined ? patch.userTimezone : current.userTimezone
+        userTimezone: patch && patch.userTimezone !== undefined ? patch.userTimezone : current.userTimezone,
+        theme: patch && patch.theme !== undefined ? patch.theme : current.theme
       });
       writeRaw(KEYS.prefs, JSON.stringify(next));
       return next;

@@ -1,5 +1,5 @@
 /**
- * F1 Paddock & Spoiler Shield — логика приложения.
+ * F1 Paddock — логика приложения.
  * Чистый ES6, без сборщика и внешних зависимостей.
  */
 (function () {
@@ -100,6 +100,7 @@
     predictions: {},
     timeMode: 'local',
     userTimezone: null, // User-selected timezone (null = browser default)
+    theme: 'dark',
     friends: [],
     predictionEditing: false,
     api: { status: 'loading', manual: false, season: null, round: null, error: null },
@@ -110,7 +111,8 @@
     newFriendId: null,
     unlockPrompted: false,
     trackFocus: null,
-    tzDropdownOpen: false
+    tzDropdownOpen: false,
+    raceDropdownOpen: false
   };
 
   var modalCloseTimer = null;
@@ -360,10 +362,115 @@
 
   /* ---------------------------------------------------------------- static */
 
-  function buildRaceOptions() {
-    el.raceSelect.innerHTML = DATA.races.map(function (race) {
-      return '<option value="' + race.id + '">R' + race.round + ' · ' + esc(race.shortRu) + '</option>';
-    }).join('');
+  function buildRaceOptions(filter) {
+    filter = (filter || '').toLowerCase().trim();
+    var selectedId = state.raceId;
+
+    var matches = DATA.races.filter(function (race) {
+      if (!filter) return true;
+      var haystack = [
+        'r' + race.round,
+        String(race.round),
+        race.nameRu,
+        race.nameEn,
+        race.shortRu,
+        race.city,
+        race.country,
+        race.circuit,
+        race.circuitShort,
+        race.weekendLabel,
+        race.format
+      ].join(' ').toLowerCase();
+      return haystack.indexOf(filter) >= 0;
+    });
+
+    el.raceListbox.innerHTML = matches.length
+      ? matches.map(function (race) {
+          var selected = race.id === selectedId;
+          return '' +
+            '<button class="race-option" type="button" role="option"' +
+              ' data-race-id="' + esc(race.id) + '"' +
+              ' aria-selected="' + selected + '"' +
+              ' tabindex="' + (selected ? '0' : '-1') + '">' +
+              '<span class="race-option__round">R' + race.round + '</span>' +
+              '<span class="race-option__cc" aria-hidden="true">' + esc(race.countryCode) + '</span>' +
+              '<span class="race-option__copy">' +
+                '<span class="race-option__name">' + esc(race.nameRu) + '</span>' +
+                '<span class="race-option__meta">' + esc(race.circuitShort) + ' · ' + esc(race.weekendLabel) + '</span>' +
+              '</span>' +
+              icon('check', 'race-option__check') +
+            '</button>';
+        }).join('')
+      : '<p class="race-popover__empty">Ничего не нашлось</p>';
+  }
+
+  function renderRaceSelect() {
+    var race = currentRace();
+    el.raceSelectCC.textContent = race.countryCode || '';
+    el.raceSelectName.textContent = race.shortRu || race.nameRu;
+    el.raceSelectBtn.title = 'R' + race.round + ' · ' + race.nameRu + ' · ' + race.weekendLabel;
+  }
+
+  function raceOptionButtons() {
+    return $all('[data-race-id]', el.raceListbox);
+  }
+
+  function positionRacePanel() {
+    if (!state.raceDropdownOpen) return;
+
+    var rect = el.raceSelectBtn.getBoundingClientRect();
+    var viewportWidth = document.documentElement.clientWidth;
+    var viewportHeight = window.innerHeight;
+
+    if (rect.bottom < 0 || rect.top > viewportHeight) {
+      closeRaceDropdown(false);
+      return;
+    }
+
+    var width = Math.min(Math.max(rect.width + 80, 320), viewportWidth - 24);
+    var left = Math.min(Math.max(12, rect.left), viewportWidth - width - 12);
+
+    el.racePanel.style.width = Math.round(width) + 'px';
+    el.racePanel.style.left = Math.round(left) + 'px';
+    el.racePanel.style.top = '0px';
+
+    var height = el.racePanel.offsetHeight;
+    var top = rect.bottom + 8;
+    if (top + height > viewportHeight - 12) {
+      var above = rect.top - height - 8;
+      top = above >= 12 ? above : Math.max(12, viewportHeight - height - 12);
+    }
+    el.racePanel.style.top = Math.round(top) + 'px';
+  }
+
+  function openRaceDropdown() {
+    if (state.raceDropdownOpen) return;
+
+    state.raceDropdownOpen = true;
+    buildRaceOptions('');
+    el.raceSearch.value = '';
+    el.racePanel.hidden = false;
+    el.raceSelectBtn.setAttribute('aria-expanded', 'true');
+    positionRacePanel();
+    el.raceSearch.focus();
+
+    var selected = el.raceListbox.querySelector('[aria-selected="true"]');
+    if (selected) selected.scrollIntoView({ block: 'nearest' });
+  }
+
+  function closeRaceDropdown(restoreFocus) {
+    if (!state.raceDropdownOpen) return;
+
+    state.raceDropdownOpen = false;
+    el.racePanel.hidden = true;
+    el.raceSelectBtn.setAttribute('aria-expanded', 'false');
+    el.raceSearch.value = '';
+    if (restoreFocus) el.raceSelectBtn.focus();
+  }
+
+  function toggleRaceDropdown() {
+    if (state.raceDropdownOpen) closeRaceDropdown(true);
+    else openRaceDropdown();
   }
 
   function renderTimeMode() {
@@ -400,14 +507,13 @@
     el.resultsNote.textContent = 'Formula 1';
     el.watchedTotal.textContent = race.sessions.length;
     el.sessionList.setAttribute('aria-label', 'Сессии: ' + race.nameRu);
-    el.raceSelect.value = race.id;
 
     var index = DATA.races.indexOf(race);
     el.prevRaceBtn.disabled = index <= 0;
     el.nextRaceBtn.disabled = index >= DATA.races.length - 1;
-    el.raceSelect.title = 'R' + race.round + ' · ' + race.nameRu + ' · ' + race.weekendLabel;
     el.gpRoundMark.textContent = 'R' + race.round;
 
+    renderRaceSelect();
     renderTrack();
     renderTimeMode();
     document.title = 'F1 Paddock · ' + race.nameRu + ' · R' + race.round;
@@ -435,10 +541,7 @@
     el.trackImage.alt = 'Схема трассы ' + race.circuit + ' с номерами поворотов';
     el.trackSectionTitle.textContent = race.circuit;
     el.trackSectionMeta.textContent = meta;
-    el.trackVisual.setAttribute('aria-label', 'Открыть карту трассы ' + race.circuit + ' и названия поворотов');
-    el.trackDetailsBtn.textContent = track.corners.length
-      ? 'Названия поворотов · ' + track.corners.length
-      : 'Карта трассы и повороты';
+    el.trackDetailsBtn.textContent = 'Карта трассы и повороты';
 
     if (track.corners.length) {
       var preview = track.corners.slice(0, 3).map(function (corner) {
@@ -630,13 +733,31 @@
     el.profileTeam.title = team.fullName;
   }
 
+  function renderTheme() {
+    var light = state.theme === 'light';
+    document.documentElement.setAttribute('data-theme', light ? 'light' : 'dark');
+    if (el.themeToggle) {
+      el.themeToggle.setAttribute('aria-pressed', String(light));
+      var label = light ? 'Включить тёмную тему' : 'Включить светлую тему';
+      el.themeToggle.setAttribute('aria-label', label);
+      el.themeToggle.title = label;
+    }
+    var meta = document.getElementById('themeColor');
+    if (meta) meta.setAttribute('content', light ? '#F4F3F0' : '#0F1117');
+  }
+
+  function toggleTheme() {
+    state.theme = state.theme === 'light' ? 'dark' : 'light';
+    STORE.savePrefs({ theme: state.theme });
+    renderTheme();
+  }
+
   function renderProfile() {
     var profile = state.profile;
     var team = getTeam(profile.team);
     el.profileName.textContent = profile.name;
     el.profileAvatar.textContent = initials(profile.name);
     applyTeam(team.id);
-    el.profileButton.setAttribute('aria-label', 'Изменить профиль: ' + profile.name + ', команда ' + team.name);
   }
 
   function renderSessions() {
@@ -684,6 +805,100 @@
           '</label>' +
         '</li>';
     }).join('');
+  }
+
+  /* ------------------------------------------------------ calendar (.ics) */
+
+  var ICS_LINE_LIMIT = 73;
+
+  function icsEscape(value) {
+    return String(value == null ? '' : value)
+      .replace(/\\/g, '\\\\')
+      .replace(/;/g, '\\;')
+      .replace(/,/g, '\\,')
+      .replace(/\r?\n/g, '\\n');
+  }
+
+  function icsStamp(date) {
+    return date.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}Z$/, 'Z');
+  }
+
+  // RFC 5545 §3.1: fold long lines at ~73 octets without splitting a
+  // multi-byte character; every continuation line starts with one space.
+  function icsFold(line) {
+    var encoder = new TextEncoder();
+    if (encoder.encode(line).length <= ICS_LINE_LIMIT) return line;
+
+    var parts = [];
+    var current = '';
+    var size = 0;
+
+    Array.from(line).forEach(function (character) {
+      var characterSize = encoder.encode(character).length;
+      if (size + characterSize > ICS_LINE_LIMIT) {
+        parts.push(current);
+        current = ' ' + character;
+        size = 1 + characterSize;
+      } else {
+        current += character;
+        size += characterSize;
+      }
+    });
+    parts.push(current);
+
+    return parts.join('\r\n');
+  }
+
+  function buildRaceIcs(race) {
+    var stamp = icsStamp(new Date());
+    var lines = [
+      'BEGIN:VCALENDAR',
+      'VERSION:2.0',
+      'PRODID:-//F1 Paddock//RU',
+      'CALSCALE:GREGORIAN',
+      'METHOD:PUBLISH',
+      'X-WR-CALNAME:' + icsEscape('F1 · ' + race.nameRu),
+      'X-WR-TIMEZONE:UTC'
+    ];
+
+    race.sessions.forEach(function (session) {
+      var start = new Date(session.start);
+      var end = new Date(start.getTime() + session.durationMin * 60 * 1000);
+
+      lines.push(
+        'BEGIN:VEVENT',
+        'UID:f1-' + race.id + '-' + session.id + '@f1-paddock.local',
+        'DTSTAMP:' + stamp,
+        'DTSTART:' + icsStamp(start),
+        'DTEND:' + icsStamp(end),
+        'SUMMARY:' + icsEscape(race.nameRu + ' · ' + session.name),
+        'LOCATION:' + icsEscape(race.circuit + ', ' + race.city),
+        'DESCRIPTION:' + icsEscape(session.name + ' (' + session.code + ') · ' + race.nameEn + ' · ' + race.circuit),
+        'CATEGORIES:Formula 1',
+        'TRANSP:TRANSPARENT',
+        'END:VEVENT'
+      );
+    });
+
+    lines.push('END:VCALENDAR');
+
+    return lines.map(icsFold).join('\r\n') + '\r\n';
+  }
+
+  function downloadRaceIcs() {
+    var race = currentRace();
+    var blob = new Blob([buildRaceIcs(race)], { type: 'text/calendar;charset=utf-8' });
+    var url = URL.createObjectURL(blob);
+    var link = document.createElement('a');
+
+    link.href = url;
+    link.download = 'f1-2026-' + race.slug + '.ics';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.setTimeout(function () { URL.revokeObjectURL(url); }, 1500);
+
+    toast('Расписание этапа сохранено в .ics', 'success', { icon: 'calendar' });
   }
 
   function refreshSessionStates() {
@@ -902,11 +1117,60 @@
     el.gpSourceText.textContent = gpText;
   }
 
+  var apiRequest = null;
+  var apiSequence = 0;
+
+  function abortApiRequest() {
+    if (!apiRequest) return;
+    var request = apiRequest;
+    apiRequest = null;
+    window.clearTimeout(request.timer);
+    window.clearTimeout(request.watchdog);
+    try {
+      request.controller.abort();
+    } catch (error) {
+      /* transport already settled */
+    }
+    // Transports normally reject on abort; if they silently ignore it, settle
+    // the UI state anyway so the header cannot stay on «Синхронизация…».
+    if (typeof request.finish === 'function') {
+      request.finish(fallbackApiState(request.manual, 'timeout'), null);
+    }
+    if (typeof request.resolve === 'function') request.resolve(null);
+  }
+
+  function fallbackApiState(manual, error) {
+    return {
+      status: navigator.onLine === false ? 'offline' : 'fallback',
+      manual: Boolean(manual),
+      season: null,
+      round: null,
+      error: error
+    };
+  }
+
   function syncApi(manual) {
+    var timeoutMs = window.F1_API_TIMEOUT_MS || 2000;
+    abortApiRequest();
+
     var controller = new AbortController();
-    var timer = window.setTimeout(function () {
-      controller.abort();
-    }, window.F1_API_TIMEOUT_MS || 2000);
+    var request = {
+      controller: controller,
+      timer: null,
+      watchdog: null,
+      done: false,
+      seq: ++apiSequence,
+      manual: Boolean(manual),
+      resolve: null,
+      finish: null
+    };
+    apiRequest = request;
+
+    // Resolved by finish() even when the transport never settles, so callers
+    // (the «Обновить данные» button) always get their cleanup callback.
+    var settled = new Promise(function (resolve) {
+      request.resolve = resolve;
+    });
 
     state.api = {
       status: 'loading',
@@ -917,7 +1181,51 @@
     };
     updateSourceUI();
 
-    return fetch(window.F1_API_URL, {
+    function finish(nextState, toastKind) {
+      if (request.done || request.seq !== apiSequence) return;
+      request.done = true;
+      window.clearTimeout(request.timer);
+      window.clearTimeout(request.watchdog);
+      if (apiRequest === request) apiRequest = null;
+      state.api = nextState;
+      updateSourceUI();
+      if (typeof request.resolve === 'function') request.resolve(nextState);
+      if (!manual || !toastKind) return;
+      if (toastKind === 'success') {
+        toast('Jolpica API ответила: сезон ' + nextState.season + ', раунд ' + nextState.round + '.', 'success', { icon: 'globe' });
+      } else {
+        toast(
+          toastKind === 'timeout'
+            ? 'Jolpica не ответила за 2 секунды. Работаем на локальном кэше.'
+            : 'Jolpica недоступна. Работаем на локальном кэше.',
+          'warn',
+          { icon: 'info' }
+        );
+      }
+    }
+
+    request.finish = finish;
+
+    request.timer = window.setTimeout(function () {
+      try {
+        controller.abort();
+      } catch (error) {
+        /* ignore */
+      }
+    }, timeoutMs);
+
+    // Watchdog: even if the transport never settles (blocked proxy, throttled tab),
+    // the header must leave «Синхронизация…» and fall back to the local snapshot.
+    request.watchdog = window.setTimeout(function () {
+      finish(fallbackApiState(manual, 'timeout'), 'timeout');
+      try {
+        controller.abort();
+      } catch (error) {
+        /* ignore */
+      }
+    }, timeoutMs + 800);
+
+    fetch(window.F1_API_URL, {
       signal: controller.signal,
       mode: 'cors',
       cache: 'no-store',
@@ -933,40 +1241,20 @@
           throw new Error('Пустой ответ API');
         }
         var race = races[0];
-        state.api = {
+        finish({
           status: 'api',
           manual: Boolean(manual),
           season: race.season || DATA.season,
           round: race.round || currentRace().round,
           error: null
-        };
-        updateSourceUI();
-        if (manual) {
-          toast('Jolpica API ответила: сезон ' + state.api.season + ', раунд ' + state.api.round + '.', 'success', { icon: 'globe' });
-        }
+        }, 'success');
       })
       .catch(function (error) {
-        state.api = {
-          status: navigator.onLine === false ? 'offline' : 'fallback',
-          manual: Boolean(manual),
-          season: null,
-          round: null,
-          error: error && error.name === 'AbortError' ? 'timeout' : 'network'
-        };
-        updateSourceUI();
-        if (manual) {
-          toast(
-            error && error.name === 'AbortError'
-              ? 'Jolpica не ответила за 2 секунды. Работаем на локальном кэше.'
-              : 'Jolpica недоступна. Работаем на локальном кэше.',
-            'warn',
-            { icon: 'info' }
-          );
-        }
-      })
-      .finally(function () {
-        window.clearTimeout(timer);
+        var timedOut = Boolean(error && error.name === 'AbortError');
+        finish(fallbackApiState(manual, timedOut ? 'timeout' : 'network'), timedOut ? 'timeout' : 'network');
       });
+
+    return settled;
   }
 
   /* -------------------------------------------------------------- profile */
@@ -1020,18 +1308,15 @@
     applyTeam(state.profile.team);
 
     el.profileModal.hidden = false;
+    el.profileModal.classList.remove('is-closing');
+    el.profileModal.classList.add('is-open');
     document.body.classList.add('modal-open');
     setPageInert(true);
     window.requestAnimationFrame(function () {
-      el.profileModal.classList.add('is-open');
       var dialog = $('.modal__dialog', el.profileModal);
       if (dialog) dialog.focus();
-      if (onboarding) {
-        el.profileNameInput.focus();
-      } else {
-        el.profileNameInput.focus();
-        el.profileNameInput.select();
-      }
+      el.profileNameInput.focus();
+      if (!onboarding) el.profileNameInput.select();
     });
   }
 
@@ -1039,6 +1324,49 @@
     if (!state.profile.onboarded) {
       state.profile = STORE.saveProfile({ onboarded: true });
     }
+  }
+
+  function finalizeProfileClose() {
+    if (!state.modalClosing) return;
+
+    state.modalClosing = false;
+    window.clearTimeout(modalCloseTimer);
+    modalCloseTimer = null;
+    state.modalMode = null;
+
+    el.profileModal.hidden = true;
+    el.profileModal.classList.remove('is-open', 'is-closing');
+    document.body.classList.remove('modal-open');
+    setPageInert(false);
+
+    var focusTarget = state.lastFocus;
+    state.lastFocus = null;
+    if (focusTarget && document.contains(focusTarget) && typeof focusTarget.focus === 'function') {
+      focusTarget.focus();
+    } else if (el.profileButton) {
+      el.profileButton.focus();
+    }
+  }
+
+  /**
+   * Self-healing for overlay state: keeps `inert` / `body.modal-open` in sync with
+   * what is actually visible. Runs on page restore and tab visibility change, so a
+   * throttled frame or timer can never leave the whole page non-interactive.
+   */
+  function reconcileOverlays() {
+    if (state.modalClosing) finalizeProfileClose();
+
+    var profileOpen = Boolean(el.profileModal && !el.profileModal.hidden);
+    var trackOpen = Boolean(el.trackDialog && (el.trackDialog.open === true || el.trackDialog.hasAttribute('open')));
+
+    if (profileOpen) {
+      if (!el.profileModal.classList.contains('is-open')) el.profileModal.classList.add('is-open');
+    } else if (el.profileModal) {
+      el.profileModal.classList.remove('is-open', 'is-closing');
+    }
+
+    setPageInert(profileOpen);
+    document.body.classList.toggle('modal-open', profileOpen || trackOpen);
   }
 
   function closeProfileModal(skipOnboarding) {
@@ -1053,18 +1381,9 @@
     applyTeam(state.profile.team);
 
     window.clearTimeout(modalCloseTimer);
-    modalCloseTimer = window.setTimeout(function () {
-      el.profileModal.hidden = true;
-      el.profileModal.classList.remove('is-open', 'is-closing');
-      state.modalClosing = false;
-      state.modalMode = null;
-      setPageInert(false);
-      if (state.lastFocus && typeof state.lastFocus.focus === 'function') {
-        state.lastFocus.focus();
-      } else {
-        el.profileButton.focus();
-      }
-    }, 170);
+    // animationend finishes the close earlier; this timer is the fallback for
+    // reduced-motion setups and throttled/occluded frames.
+    modalCloseTimer = window.setTimeout(finalizeProfileClose, 240);
   }
 
   /* --------------------------------------------------------------- friend */
@@ -1409,6 +1728,7 @@
     el.tzSearch = $('#tzSearch');
     el.tzListbox = $('#tzListbox');
     el.profileButton = $('#profileButton');
+    el.themeToggle = $('#themeToggle');
     el.profileAvatar = $('#profileAvatar');
     el.profileName = $('#profileName');
     el.profileTeam = $('#profileTeam');
@@ -1430,7 +1750,12 @@
     el.statDistance = $('#statDistance');
     el.resultsNote = $('#resultsNote');
     el.predictorRound = $('#predictorRound');
-    el.raceSelect = $('#raceSelect');
+    el.raceSelectBtn = $('#raceSelectBtn');
+    el.raceSelectCC = $('#raceSelectCC');
+    el.raceSelectName = $('#raceSelectName');
+    el.racePanel = $('#racePanel');
+    el.raceSearch = $('#raceSearch');
+    el.raceListbox = $('#raceListbox');
     el.prevRaceBtn = $('#prevRaceBtn');
     el.nextRaceBtn = $('#nextRaceBtn');
     el.gpRoundMark = $('#gpRoundMark');
@@ -1451,6 +1776,7 @@
     el.timeModeControl = $('#timeModeControl');
     el.timeModeHint = $('#timeModeHint');
     el.timeModeLabel = $('#timeModeLabel');
+    el.exportIcsBtn = $('#exportIcsBtn');
 
     el.sessionList = $('#sessionList');
     el.progressBar = $('#progressBar');
@@ -1520,6 +1846,8 @@
       openProfileModal('edit');
     });
 
+    el.themeToggle.addEventListener('click', toggleTheme);
+
     el.trackVisual.addEventListener('click', function () {
       openTrackDialog(el.trackVisual);
     });
@@ -1545,6 +1873,13 @@
       var closer = event.target.closest('[data-close-modal]');
       if (closer) closeProfileModal(true);
     });
+
+    var profileDialog = $('.modal__dialog', el.profileModal);
+    if (profileDialog) {
+      profileDialog.addEventListener('animationend', function (event) {
+        if (event.target === profileDialog && state.modalClosing) finalizeProfileClose();
+      });
+    }
 
     el.skipProfileBtn.addEventListener('click', function () {
       closeProfileModal(true);
@@ -1599,9 +1934,99 @@
       if (button) setStatus(button.dataset.mode);
     });
 
-    el.raceSelect.addEventListener('change', function () {
-      selectRace(el.raceSelect.value);
+    // Race picker dropdown events
+    el.raceSelectBtn.addEventListener('click', function () {
+      toggleRaceDropdown();
     });
+
+    el.raceSelectBtn.addEventListener('keydown', function (event) {
+      if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+        event.preventDefault();
+        openRaceDropdown();
+      }
+    });
+
+    el.raceSearch.addEventListener('input', function () {
+      buildRaceOptions(el.raceSearch.value);
+      positionRacePanel();
+    });
+
+    el.raceSearch.addEventListener('keydown', function (event) {
+      if (event.key === 'ArrowDown') {
+        var first = raceOptionButtons()[0];
+        if (first) {
+          event.preventDefault();
+          first.focus();
+        }
+      } else if (event.key === 'Enter') {
+        var match = raceOptionButtons()[0];
+        if (match) {
+          event.preventDefault();
+          selectRace(match.dataset.raceId);
+          closeRaceDropdown(true);
+        }
+      } else if (event.key === 'Escape') {
+        event.preventDefault();
+        closeRaceDropdown(true);
+      }
+    });
+
+    el.raceListbox.addEventListener('click', function (event) {
+      var option = event.target.closest('[data-race-id]');
+      if (!option) return;
+      selectRace(option.dataset.raceId);
+      closeRaceDropdown(true);
+    });
+
+    el.raceListbox.addEventListener('keydown', function (event) {
+      var options = raceOptionButtons();
+      var focusedIndex = options.indexOf(document.activeElement);
+
+      if (focusedIndex < 0) {
+        if (event.key === 'ArrowDown' && options.length > 0) {
+          event.preventDefault();
+          options[0].focus();
+        }
+        return;
+      }
+
+      if (event.key === 'ArrowDown') {
+        event.preventDefault();
+        options[(focusedIndex + 1) % options.length].focus();
+      } else if (event.key === 'ArrowUp') {
+        event.preventDefault();
+        if (focusedIndex === 0) el.raceSearch.focus();
+        else options[focusedIndex - 1].focus();
+      } else if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        selectRace(options[focusedIndex].dataset.raceId);
+        closeRaceDropdown(true);
+      } else if (event.key === 'Escape') {
+        event.preventDefault();
+        closeRaceDropdown(true);
+      } else if (event.key === 'Home') {
+        event.preventDefault();
+        options[0].focus();
+      } else if (event.key === 'End') {
+        event.preventDefault();
+        options[options.length - 1].focus();
+      }
+    });
+
+    document.addEventListener('click', function (event) {
+      if (!state.raceDropdownOpen) return;
+      if (el.racePanel.contains(event.target) || el.raceSelectBtn.contains(event.target)) return;
+      closeRaceDropdown(false);
+    });
+
+    document.addEventListener('keydown', function (event) {
+      if (event.key === 'Escape' && state.raceDropdownOpen) {
+        closeRaceDropdown(true);
+      }
+    });
+
+    window.addEventListener('resize', positionRacePanel);
+    window.addEventListener('scroll', positionRacePanel, true);
 
     el.prevRaceBtn.addEventListener('click', function () {
       var index = DATA.races.indexOf(currentRace());
@@ -1617,6 +2042,8 @@
       var button = event.target.closest('[data-time-mode]');
       if (button) setTimeMode(button.dataset.timeMode);
     });
+
+    el.exportIcsBtn.addEventListener('click', downloadRaceIcs);
 
     el.statusControl.addEventListener('keydown', function (event) {
       var keys = ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home', 'End'];
@@ -1860,6 +2287,20 @@
       updateSourceUI();
     });
 
+    // Leaving the tab cancels a hanging API probe; coming back re-checks the
+    // overlay state so `inert` can never outlive a modal.
+    document.addEventListener('visibilitychange', function () {
+      if (document.visibilityState === 'hidden') {
+        abortApiRequest();
+      } else {
+        reconcileOverlays();
+      }
+    });
+
+    window.addEventListener('pageshow', function () {
+      reconcileOverlays();
+    });
+
     window.addEventListener('storage', function (event) {
       if (event.key && Object.keys(STORE.KEYS).every(function (key) { return STORE.KEYS[key] !== event.key; })) {
         return;
@@ -1872,11 +2313,13 @@
       var prefs = STORE.loadPrefs();
       state.timeMode = prefs.timeMode;
       state.userTimezone = prefs.userTimezone;
+      state.theme = prefs.theme;
       var selectedRace = STORE.loadSelectedRace();
       if (selectedRace) state.raceId = selectedRace;
       ensureRaceSessions(state.raceId);
       state.predictionEditing = false;
       applyTeam(state.profile.team);
+      renderTheme();
       renderProfile();
       renderStatic();
       renderTimezone();
@@ -1972,10 +2415,12 @@
     state.predictions = snapshot.predictions;
     state.timeMode = snapshot.prefs.timeMode;
     state.userTimezone = snapshot.prefs.userTimezone;
+    state.theme = snapshot.prefs.theme;
     state.raceId = snapshot.selectedRace || computeDefaultRaceId();
     STORE.saveSelectedRace(state.raceId);
     ensureRaceSessions(state.raceId);
 
+    renderTheme();
     renderStatic();
     renderTimezone();
     applyTeam(state.profile.team);
