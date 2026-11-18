@@ -1,13 +1,31 @@
 <!DOCTYPE html>
-<html lang="ru" data-team="ferrari" data-spoiler="recording">
+<html lang="ru" data-team="ferrari" data-spoiler="recording" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#0F1117">
-  <meta name="description" content="F1 Paddock & Spoiler Shield — локальный компаньон гоночного уикенда: расписание в вашем часовом поясе, защита от спойлеров, друзья в паддоке и предиктор подиума.">
-  <title>F1 Paddock &amp; Spoiler Shield</title>
+  <meta name="theme-color" content="#0F1117" id="themeColor">
+  <meta name="description" content="F1 Paddock — локальный компаньон гоночного уикенда: расписание в вашем часовом поясе, защита от спойлеров, друзья в паддоке и предиктор подиума.">
+  <title>F1 Paddock</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23E10600'/%3E%3Cpath d='M32 12l14 6v10c0 10-6 16-14 20-8-4-14-10-14-20V18l14-6z' fill='none' stroke='white' stroke-width='4'/%3E%3C/svg%3E">
-  <style>html{background:#0F1117}</style>
+  <style>html{background:#0F1117}html[data-theme="light"]{background:#F4F3F0}</style>
+  <script>
+    /*
+     * Theme pre-paint: read the saved preference before the stylesheet paints,
+     * so a returning user never sees a flash of the wrong theme after F5.
+     */
+    (function () {
+      try {
+        var raw = window.localStorage.getItem('f1_prefs');
+        var prefs = raw ? JSON.parse(raw) : null;
+        var theme = prefs && prefs.theme === 'light' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', theme);
+        var meta = document.getElementById('themeColor');
+        if (meta) meta.setAttribute('content', theme === 'light' ? '#F4F3F0' : '#0F1117');
+      } catch (error) {
+        /* Corrupt storage: keep the default dark theme. */
+      }
+    })();
+  </script>
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
@@ -91,20 +109,27 @@
       <circle cx="12" cy="8" r="3.6"/>
       <path d="M4.8 20c.5-3.6 3.4-5.6 7.2-5.6s6.7 2 7.2 5.6"/>
     </symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="4.1"/>
+      <path d="M12 2.6v2.2M12 19.2v2.2M4.4 4.4l1.6 1.6M18 18l1.6 1.6M2.6 12h2.2M19.2 12h2.2M4.4 19.6l1.6-1.6M18 6l1.6-1.6"/>
+    </symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24">
+      <path d="M20.2 14.4A8.4 8.4 0 0 1 9.6 3.8 8.6 8.6 0 1 0 20.2 14.4Z"/>
+    </symbol>
   </svg>
 
   <div class="page-aura" aria-hidden="true"></div>
 
   <header class="site-header">
     <div class="shell site-header__inner">
-      <a class="brand" href="#main" aria-label="F1 Paddock and Spoiler Shield — на главную">
+      <a class="brand" href="#main">
         <span class="brand__mark" aria-hidden="true">
           <span>F1</span>
           <svg class="brand__shield"><use href="#i-shield"></use></svg>
         </span>
         <span class="brand__text">
-          <strong>F1 PADDOCK</strong>
-          <span>SPOILER SHIELD</span>
+          <strong id="brandName">F1 PADDOCK</strong>
+          <span id="brandSub">Personal Weekend Companion</span>
         </span>
       </a>
 
@@ -131,7 +156,13 @@
           <span id="headerShieldText">Щит</span>
         </span>
 
-        <button class="profile-chip" id="profileButton" type="button" aria-haspopup="dialog" aria-label="Изменить профиль">
+        <button class="theme-toggle" id="themeToggle" type="button" aria-pressed="false" aria-label="Включить светлую тему" title="Включить светлую тему">
+          <svg class="icon theme-toggle__sun" aria-hidden="true"><use href="#i-sun"></use></svg>
+          <svg class="icon theme-toggle__moon" aria-hidden="true"><use href="#i-moon"></use></svg>
+        </button>
+
+        <button class="profile-chip" id="profileButton" type="button" aria-haspopup="dialog">
+          <span class="sr-only" id="profileActionLabel">Изменить профиль:</span>
           <span class="avatar avatar--profile" id="profileAvatar" aria-hidden="true">Г</span>
           <span class="profile-chip__info">
             <strong id="profileName">Гонщик</strong>
@@ -148,6 +179,65 @@
     </div>
   </header>
 
+  <script>
+    /*
+     * Pre-paint hydration. The header ships with the default profile, so a
+     * returning user would otherwise see "Гонщик / Ferrari" for a frame
+     * before js/app.js reads localStorage. This synchronous block runs while
+     * the body is still parsing and writes the same fields app.js will.
+     */
+    (function () {
+      try {
+        var raw = window.localStorage.getItem('f1_profile');
+        if (!raw) return;
+        var profile = JSON.parse(raw);
+        if (!profile || typeof profile.name !== 'string') return;
+
+        var teams = {
+          ferrari: 'Ferrari',
+          mclaren: 'McLaren',
+          redbull: 'Red Bull',
+          mercedes: 'Mercedes',
+          astonmartin: 'Aston Martin',
+          williams: 'Williams',
+          alpine: 'Alpine',
+          haas: 'Haas',
+          audi: 'Audi',
+          racingbulls: 'Racing Bulls',
+          cadillac: 'Cadillac'
+        };
+        var teamId = teams[profile.team] ? profile.team : 'ferrari';
+        var name = profile.name.replace(/\s+/g, ' ').trim().slice(0, 24);
+        if (!name) return;
+
+        var initials = name.split(/\s+/).slice(0, 2).map(function (part) {
+          return Array.from(part)[0] || '';
+        }).join('').toUpperCase() || '?';
+
+        document.documentElement.setAttribute('data-team', teamId);
+        document.getElementById('profileName').textContent = name;
+        document.getElementById('profileAvatar').textContent = initials;
+        document.getElementById('profileTeamName').textContent = teams[teamId];
+
+        var prefs = JSON.parse(window.localStorage.getItem('f1_prefs') || 'null');
+        var zone = prefs && typeof prefs.userTimezone === 'string' && prefs.userTimezone
+          ? prefs.userTimezone
+          : new Intl.DateTimeFormat().resolvedOptions().timeZone;
+        if (zone) {
+          var parts = new Intl.DateTimeFormat('en-US', {
+            timeZone: zone,
+            timeZoneName: 'longOffset'
+          }).formatToParts(new Date());
+          var offset = parts.filter(function (part) { return part.type === 'timeZoneName'; })[0];
+          var suffix = offset ? ' · ' + offset.value.replace('GMT', 'UTC') : '';
+          document.getElementById('tzLabel').textContent = zone + suffix;
+        }
+      } catch (error) {
+        /* Corrupt storage or no Intl: keep the static defaults. */
+      }
+    })();
+  </script>
+
   <main class="shell dashboard" id="main">
     <div class="storage-warning" id="storageWarning" hidden role="status">
       <svg class="icon" aria-hidden="true"><use href="#i-warning"></use></svg>
@@ -161,10 +251,14 @@
           <span class="topline-sep" aria-hidden="true"></span>
           <div class="race-picker">
             <button class="race-picker__nav" type="button" id="prevRaceBtn" aria-label="Предыдущий этап сезона">‹</button>
-            <span class="select-wrap race-picker__wrap">
-              <select class="race-picker__select" id="raceSelect" aria-label="Выбрать этап сезона 2026"></select>
-              <svg class="select-chevron icon" aria-hidden="true"><use href="#i-chevron"></use></svg>
-            </span>
+            <div class="race-select">
+              <button class="race-select__trigger" id="raceSelectBtn" type="button" aria-haspopup="listbox" aria-expanded="false" aria-controls="raceListbox">
+                <span class="sr-only">Этап сезона:</span>
+                <span class="race-select__cc" id="raceSelectCC" aria-hidden="true">BR</span>
+                <span class="race-select__name" id="raceSelectName">Сан-Паулу</span>
+                <svg class="icon race-select__chevron" aria-hidden="true"><use href="#i-chevron"></use></svg>
+              </button>
+            </div>
             <button class="race-picker__nav" type="button" id="nextRaceBtn" aria-label="Следующий этап сезона">›</button>
           </div>
           <span class="tag tag--ghost" id="gpFormat">Классический уикенд</span>
@@ -210,17 +304,16 @@
         </dl>
 
         <section class="track-section" aria-labelledby="trackSectionTitle">
-          <button class="track-visual" id="trackVisual" type="button" aria-haspopup="dialog" aria-label="Открыть карту трассы и названия поворотов">
-            <img class="track-visual__image" id="trackImage" src="assets/tracks/brazil.webp" alt="Схема трассы Интерлагос с номерами поворотов" width="1252" height="704">
-            <span class="track-visual__hint">Карта трассы ↗</span>
+          <button class="track-visual" id="trackVisual" type="button" aria-haspopup="dialog">
+            <img class="track-visual__image" id="trackImage" src="assets/tracks/brazil.webp" alt="Схема трассы Интерлагос с номерами поворотов" width="1252" height="704" loading="lazy" decoding="async">
           </button>
           <div class="track-copy">
             <p class="eyebrow">Трасса</p>
-            <h3 class="track-copy__title" id="trackSectionTitle">Автодром Интерлагос</h3>
+            <h2 class="track-copy__title" id="trackSectionTitle">Автодром Интерлагос</h2>
             <p class="track-copy__meta" id="trackSectionMeta">4.309 км · 15 поворотов · 71 круг</p>
             <div class="track-copy__names" id="trackNamesPreview"></div>
             <button class="btn btn--secondary btn--sm" id="trackDetailsBtn" type="button" aria-haspopup="dialog">
-              Все повороты и названия
+              Карта трассы и повороты
             </button>
           </div>
         </section>
@@ -235,9 +328,15 @@
                 <span id="tzInline">Europe/Moscow</span>
               </p>
             </div>
-            <div class="time-mode" id="timeModeControl" role="group" aria-label="Отображение времени сессий">
-              <button class="time-mode__btn is-active" type="button" data-time-mode="local" aria-pressed="true">Моё время</button>
-              <button class="time-mode__btn" type="button" data-time-mode="track" aria-pressed="false">Время трассы</button>
+            <div class="sessions__tools">
+              <div class="time-mode" id="timeModeControl" role="group" aria-label="Отображение времени сессий">
+                <button class="time-mode__btn is-active" type="button" data-time-mode="local" aria-pressed="true">Моё время</button>
+                <button class="time-mode__btn" type="button" data-time-mode="track" aria-pressed="false">Время трассы</button>
+              </div>
+              <button class="btn btn--secondary btn--sm sessions__ics" id="exportIcsBtn" type="button">
+                <svg class="icon" aria-hidden="true"><use href="#i-calendar"></use></svg>
+                <span>В календарь (.ics)</span>
+              </button>
             </div>
           </div>
 
@@ -459,8 +558,8 @@
       <div class="footer-brand">
         <span class="footer-brand__mark" aria-hidden="true">F1</span>
         <div>
-          <strong>F1 Paddock &amp; Spoiler Shield</strong>
-          <p>Локальный компаньон уикенда. Данные не покидают ваш браузер.</p>
+          <strong>F1 Paddock</strong>
+          <p>Личный компаньон уикенда. Данные не покидают ваш браузер.</p>
         </div>
       </div>
       <div class="footer-meta">
@@ -487,7 +586,7 @@
     </div>
 
     <div class="track-dialog__map">
-      <img id="trackDialogImage" src="assets/tracks/brazil.webp" alt="Схема трассы Интерлагос с номерами поворотов" width="1252" height="704">
+      <img id="trackDialogImage" alt="Схема трассы с номерами поворотов" width="1252" height="704" loading="lazy" decoding="async">
     </div>
 
     <div class="track-dialog__legend" id="trackDialogLegend"></div>
@@ -537,6 +636,12 @@
         Mock-авторизация без пароля. Имя и команда хранятся только в localStorage вашего браузера.
       </p>
     </div>
+  </div>
+
+  <div class="race-popover" id="racePanel" hidden>
+    <label class="sr-only" for="raceSearch">Поиск этапа сезона</label>
+    <input class="race-popover__search" id="raceSearch" type="text" placeholder="Поиск: город, трасса, R##" autocomplete="off">
+    <div class="race-popover__list" id="raceListbox" role="listbox" aria-label="Этапы сезона 2026"></div>
   </div>
 
   <div class="toast-region" id="toastRegion" aria-live="polite" aria-atomic="false"></div>
