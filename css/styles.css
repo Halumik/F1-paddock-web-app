@@ -276,11 +276,25 @@ ol, ul { list-style: none; }
 .btn:active { transform: translateY(0) scale(0.99); }
 
 .btn--accent {
-  background: linear-gradient(180deg, var(--accent-2), var(--accent));
+  /* Сплошной акцент без градиента и цветного свечения: ливрея команды
+     больше не «просвечивает» за границами кнопки. */
+  background: var(--accent);
   color: var(--accent-ink);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28), 0 10px 26px -14px rgba(var(--accent-rgb), 0.9);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18);
 }
-.btn--accent:hover { filter: brightness(1.06); }
+.btn--accent:hover { filter: brightness(1.05); }
+
+.btn--telegram {
+  background: var(--surface-2);
+  border-color: var(--border-strong);
+  color: var(--text);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+.btn--telegram .icon { color: var(--accent-text); }
+.btn--telegram:hover {
+  background: var(--surface-3);
+  border-color: var(--border-hover);
+}
 
 .btn--secondary {
   background: var(--surface-2);
@@ -796,6 +810,57 @@ html[data-theme="light"] .theme-toggle__sun { display: none; }
 }
 .profile-chip:hover .profile-chip__edit { color: var(--text); background: var(--white-06); }
 .profile-chip__edit .icon { width: 15px; height: 15px; }
+
+.profile-chip[data-state="guest"] {
+  height: 44px;
+  gap: 8px;
+  padding: 0 12px;
+  border-radius: 12px;
+}
+.profile-chip__guest {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+.profile-chip__guest .icon {
+  width: 16px;
+  height: 16px;
+  color: var(--accent-text);
+  flex: none;
+}
+.profile-chip__guest-short { display: none; }
+.profile-chip__account {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-width: 0;
+}
+.profile-chip__meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+.profile-chip__tg {
+  max-width: 96px;
+  overflow: hidden;
+  color: var(--text-dim);
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.profile-chip__tg::before {
+  content: '·';
+  margin-right: 5px;
+  opacity: 0.7;
+}
 
 /* 5. Layout & Grand Prix card ============================================ */
 
@@ -2438,6 +2503,188 @@ body.modal-open { overflow: hidden; }
 }
 .modal__note .icon { width: 13px; height: 13px; margin-top: 1px; flex: none; }
 
+.auth-stepper {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 4px 0 18px;
+  padding: 0;
+  list-style: none;
+}
+.auth-stepper__item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  flex: 1;
+  min-width: 0;
+  color: var(--text-dim);
+  font-size: 10px;
+  font-weight: 650;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.auth-stepper__item:not(:last-child)::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  margin-left: 2px;
+  background: var(--border);
+}
+.auth-stepper__dot {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: var(--surface-2);
+  color: var(--text-dim);
+  font-size: 10px;
+  font-weight: 700;
+  flex: none;
+  transition: background 0.16s var(--ease), border-color 0.16s var(--ease), color 0.16s var(--ease);
+}
+.auth-stepper__label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.auth-stepper__item.is-active { color: var(--text); }
+.auth-stepper__item.is-active .auth-stepper__dot {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--accent-ink);
+  box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.16);
+}
+.auth-stepper__item.is-complete .auth-stepper__dot {
+  border-color: rgba(var(--accent-rgb), 0.5);
+  background: var(--surface-3);
+  color: var(--accent-text);
+}
+.auth-stepper__item.is-complete:not(:last-child)::after {
+  background: rgba(var(--accent-rgb), 0.4);
+}
+
+.auth-step { animation: fadeIn 0.18s var(--ease); }
+
+.auth-welcome {
+  display: flex;
+  gap: 12px;
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--surface-2);
+}
+.auth-welcome__icon {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  background: rgba(var(--accent-rgb), 0.14);
+  color: var(--accent-text);
+  flex: none;
+}
+.auth-welcome__icon .icon { width: 20px; height: 20px; }
+.auth-welcome strong { display: block; font-size: 13px; }
+.auth-welcome p {
+  margin: 4px 0 0;
+  color: var(--text-muted);
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.auth-hint {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 10px 0 0;
+  padding: 10px 12px;
+  border: 1px solid rgba(var(--accent-rgb), 0.22);
+  border-radius: 10px;
+  background: rgba(var(--accent-rgb), 0.07);
+  color: var(--text-muted);
+  font-size: 10.5px;
+  line-height: 1.5;
+}
+.auth-hint .icon {
+  width: 14px;
+  height: 14px;
+  margin-top: 1px;
+  color: var(--accent-text);
+  flex: none;
+}
+.auth-hint b { color: var(--text); font-weight: 700; }
+.auth-hint code {
+  padding: 1px 4px;
+  border-radius: 4px;
+  background: var(--surface-3);
+  color: var(--accent-text);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+
+.auth-code-input {
+  height: 44px;
+  padding-left: 0.25em;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.25em;
+  text-align: center;
+}
+.auth-code-input::placeholder {
+  color: var(--text-dim);
+  letter-spacing: 0.25em;
+}
+
+.auth-account {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--surface-2);
+}
+.auth-account__copy {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+  flex: 1;
+}
+.auth-account__copy strong {
+  overflow: hidden;
+  font-size: 13px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.auth-account__meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+.auth-account__tg {
+  overflow: hidden;
+  color: var(--text-dim);
+  font-size: 10px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.auth-account__tg::before {
+  content: '·';
+  margin-right: 4px;
+  opacity: 0.7;
+}
+.auth-account__logout {
+  flex: none;
+}
+
 .team-picker { margin: 16px 0 0; padding: 0; border: 0; min-width: 0; }
 .team-picker legend { margin-bottom: 7px; }
 .team-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
@@ -2612,10 +2859,19 @@ body.modal-open { overflow: hidden; }
   .brand__text span { display: none; }
   .brand__text strong { font-size: 12px; }
   .brand__mark { width: 36px; height: 36px; border-radius: 10px; }
-  .profile-chip { height: 46px; padding: 4px 7px 4px 5px; }
+  .profile-chip { height: 46px; gap: 7px; padding: 4px 7px 4px 5px; }
+  .profile-chip[data-state="guest"] { height: 46px; padding: 0 10px; }
+  /* Чип часового пояса скрыт с 1180 px; пустая обёртка не должна занимать место. */
+  .tz-dropdown { display: none; }
+  .profile-chip__guest-wide { display: none; }
+  .profile-chip__guest-short { display: inline; }
+  /* @ник остаётся в aria-label; в узкой шапке он не помещается. */
+  .profile-chip__tg { display: none; }
   .avatar--profile { width: 32px; height: 32px; font-size: 12px; }
   .profile-chip__info strong { max-width: 96px; font-size: 12px; }
   .profile-chip__edit { display: none; }
+  .auth-stepper { margin-bottom: 14px; }
+  .auth-welcome { padding: 12px; }
   .header-shield { height: 30px; padding: 0 8px; }
   .dashboard { padding-top: 18px; gap: 18px; }
   .side-stack { gap: 16px; }
@@ -2671,7 +2927,8 @@ body.modal-open { overflow: hidden; }
   .header-shield span:last-child { display: none; }
   .header-shield { width: 30px; padding: 0; justify-content: center; }
   .brand__text strong { max-width: 92px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .profile-chip__info strong { max-width: 74px; }
+  .profile-chip__info strong { max-width: 64px; }
+  .profile-chip__account { gap: 6px; }
   .team-tag { font-size: 8.5px; }
   .gp-title { font-size: clamp(27px, 9vw, 36px); }
   .gp-card__topline .tag--ghost { display: none; }
@@ -2722,6 +2979,9 @@ body.modal-open { overflow: hidden; }
   .session__code { width: 30px; height: 30px; font-size: 8.5px; }
   .session__sub { display: none; }
   .profile-chip__info strong { max-width: 64px; }
+  .profile-chip__tg { max-width: 48px; }
+  .auth-stepper__label { display: none; }
+  .auth-code-input { font-size: 16px; letter-spacing: 0.25em; }
   .source-pill { display: none; }
   .card-head__icon { width: 34px; height: 34px; border-radius: 9px; }
   .card-title { font-size: 16px; }
