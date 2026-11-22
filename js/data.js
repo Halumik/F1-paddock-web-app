@@ -157,7 +157,6 @@
     "localTimezone": "Australia/Melbourne",
     "weekendLabel": "6–8 марта 2026",
     "format": "Классический уикенд",
-    "hasTrackMap": false,
     "sessions": [
       {
         "id": "fp1",
@@ -243,7 +242,6 @@
     "localTimezone": "Asia/Shanghai",
     "weekendLabel": "13–15 марта 2026",
     "format": "Спринт-уикенд",
-    "hasTrackMap": false,
     "sessions": [
       {
         "id": "fp1",
@@ -329,7 +327,6 @@
     "localTimezone": "Asia/Tokyo",
     "weekendLabel": "27–29 марта 2026",
     "format": "Классический уикенд",
-    "hasTrackMap": false,
     "sessions": [
       {
         "id": "fp1",
@@ -415,7 +412,6 @@
     "localTimezone": "America/New_York",
     "weekendLabel": "1–3 мая 2026",
     "format": "Спринт-уикенд",
-    "hasTrackMap": false,
     "sessions": [
       {
         "id": "fp1",
@@ -501,7 +497,6 @@
     "localTimezone": "America/Toronto",
     "weekendLabel": "22–24 мая 2026",
     "format": "Спринт-уикенд",
-    "hasTrackMap": false,
     "sessions": [
       {
         "id": "fp1",
@@ -587,7 +582,6 @@
     "localTimezone": "Europe/Monaco",
     "weekendLabel": "5–7 июня 2026",
     "format": "Классический уикенд",
-    "hasTrackMap": false,
     "sessions": [
       {
         "id": "fp1",
@@ -673,7 +667,6 @@
     "localTimezone": "Europe/Madrid",
     "weekendLabel": "12–14 июня 2026",
     "format": "Классический уикенд",
-    "hasTrackMap": false,
     "sessions": [
       {
         "id": "fp1",
@@ -759,7 +752,6 @@
     "localTimezone": "Europe/Vienna",
     "weekendLabel": "26–28 июня 2026",
     "format": "Классический уикенд",
-    "hasTrackMap": false,
     "sessions": [
       {
         "id": "fp1",
@@ -845,7 +837,6 @@
     "localTimezone": "Europe/London",
     "weekendLabel": "3–5 июля 2026",
     "format": "Спринт-уикенд",
-    "hasTrackMap": false,
     "sessions": [
       {
         "id": "fp1",
@@ -931,7 +922,6 @@
     "localTimezone": "Europe/Brussels",
     "weekendLabel": "17–19 июля 2026",
     "format": "Классический уикенд",
-    "hasTrackMap": false,
     "sessions": [
       {
         "id": "fp1",
@@ -1017,7 +1007,6 @@
     "localTimezone": "Europe/Budapest",
     "weekendLabel": "24–26 июля 2026",
     "format": "Классический уикенд",
-    "hasTrackMap": false,
     "sessions": [
       {
         "id": "fp1",
@@ -1103,7 +1092,6 @@
     "localTimezone": "Europe/Amsterdam",
     "weekendLabel": "21–23 августа 2026",
     "format": "Спринт-уикенд",
-    "hasTrackMap": false,
     "sessions": [
       {
         "id": "fp1",
@@ -1189,7 +1177,6 @@
     "localTimezone": "Europe/Rome",
     "weekendLabel": "4–6 сентября 2026",
     "format": "Классический уикенд",
-    "hasTrackMap": false,
     "sessions": [
       {
         "id": "fp1",
@@ -1275,7 +1262,6 @@
     "localTimezone": "Europe/Madrid",
     "weekendLabel": "11–13 сентября 2026",
     "format": "Классический уикенд",
-    "hasTrackMap": false,
     "sessions": [
       {
         "id": "fp1",
@@ -1361,7 +1347,6 @@
     "localTimezone": "Asia/Baku",
     "weekendLabel": "24–26 сентября 2026",
     "format": "Классический уикенд",
-    "hasTrackMap": false,
     "sessions": [
       {
         "id": "fp1",
@@ -1447,7 +1432,6 @@
     "localTimezone": "Asia/Kuala_Lumpur",
     "weekendLabel": "2–4 октября 2026",
     "format": "Классический уикенд",
-    "hasTrackMap": false,
     "sessions": [
       {
         "id": "fp1",
@@ -1533,7 +1517,6 @@
     "localTimezone": "Asia/Singapore",
     "weekendLabel": "9–11 октября 2026",
     "format": "Спринт-уикенд",
-    "hasTrackMap": false,
     "sessions": [
       {
         "id": "fp1",
@@ -1619,7 +1602,6 @@
     "localTimezone": "America/Chicago",
     "weekendLabel": "23–25 октября 2026",
     "format": "Классический уикенд",
-    "hasTrackMap": false,
     "sessions": [
       {
         "id": "fp1",
@@ -1705,7 +1687,6 @@
     "localTimezone": "America/Mexico_City",
     "weekendLabel": "30 октября – 1 ноября 2026",
     "format": "Классический уикенд",
-    "hasTrackMap": false,
     "sessions": [
       {
         "id": "fp1",
@@ -1791,7 +1772,6 @@
     "localTimezone": "America/Sao_Paulo",
     "weekendLabel": "6–8 ноября 2026",
     "format": "Классический уикенд",
-    "hasTrackMap": true,
     "sessions": [
       {
         "id": "fp1",
@@ -1877,7 +1857,6 @@
     "localTimezone": "America/Los_Angeles",
     "weekendLabel": "19–21 ноября 2026",
     "format": "Классический уикенд",
-    "hasTrackMap": false,
     "sessions": [
       {
         "id": "fp1",
@@ -1947,7 +1926,6 @@
     "localTimezone": "Asia/Qatar",
     "weekendLabel": "27–29 ноября 2026",
     "format": "Классический уикенд",
-    "hasTrackMap": false,
     "sessions": [
       {
         "id": "fp1",
@@ -2017,7 +1995,6 @@
     "localTimezone": "Asia/Dubai",
     "weekendLabel": "4–6 декабря 2026",
     "format": "Классический уикенд",
-    "hasTrackMap": false,
     "sessions": [
       {
         "id": "fp1",

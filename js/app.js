@@ -92,6 +92,19 @@
     watched: { label: 'Посмотрел', note: 'Уже посмотрел и готов к разбору.' }
   };
 
+  // Mock-авторизация: код проверяется на клиенте, реального Bot API нет.
+  // Значение не хранится в localStorage и не логируется.
+  var MOCK_TELEGRAM_CODE = '1234';
+  var TELEGRAM_BOT_HANDLE = '@F1PaddockBot';
+  var TELEGRAM_HANDLE_RE = /^@[A-Za-z][A-Za-z0-9_]{4,31}$/;
+
+  var systemThemeQuery = null;
+  try {
+    systemThemeQuery = window.matchMedia ? window.matchMedia('(prefers-color-scheme: light)') : null;
+  } catch (error) {
+    systemThemeQuery = null;
+  }
+
   var state = {
     profile: null,
     status: null,
@@ -100,12 +113,16 @@
     predictions: {},
     timeMode: 'local',
     userTimezone: null, // User-selected timezone (null = browser default)
-    theme: 'dark',
+    theme: null, // null = follow the system theme, 'dark'/'light' = explicit choice
     friends: [],
     predictionEditing: false,
     api: { status: 'loading', manual: false, season: null, round: null, error: null },
     modalMode: null,
     modalClosing: false,
+    authStep: null,
+    pendingTelegram: '',
+    codeRequestedAt: null,
+    authConfirmedCode: false,
     selectedTeam: 'ferrari',
     lastFocus: null,
     newFriendId: null,
@@ -731,10 +748,29 @@
     el.profileTeamName.textContent = team.name;
     el.profileTeam.style.setProperty('--team-color', team.accent);
     el.profileTeam.title = team.fullName;
+    if (el.accountTeam) {
+      el.accountTeam.style.setProperty('--team-color', team.accent);
+      el.accountTeam.title = team.fullName;
+    }
+    if (el.accountTeamName) el.accountTeamName.textContent = team.name;
+  }
+
+  function isSignedIn(profile) {
+    var current = profile || state.profile;
+    return Boolean(current && current.telegram);
+  }
+
+  function isValidTelegramHandle(handle) {
+    return TELEGRAM_HANDLE_RE.test(handle) && handle.toLowerCase() !== TELEGRAM_BOT_HANDLE.toLowerCase();
+  }
+
+  function resolvedTheme() {
+    if (state.theme === 'light' || state.theme === 'dark') return state.theme;
+    return systemThemeQuery && systemThemeQuery.matches ? 'light' : 'dark';
   }
 
   function renderTheme() {
-    var light = state.theme === 'light';
+    var light = resolvedTheme() === 'light';
     document.documentElement.setAttribute('data-theme', light ? 'light' : 'dark');
     if (el.themeToggle) {
       el.themeToggle.setAttribute('aria-pressed', String(light));
@@ -747,16 +783,46 @@
   }
 
   function toggleTheme() {
-    state.theme = state.theme === 'light' ? 'dark' : 'light';
+    // Первое ручное переключение фиксирует явный выбор и отключает следование системе.
+    state.theme = resolvedTheme() === 'light' ? 'dark' : 'light';
     STORE.savePrefs({ theme: state.theme });
     renderTheme();
+  }
+
+  function initSystemThemeListener() {
+    if (!systemThemeQuery) return;
+    var onChange = function () {
+      if (state.theme === null) renderTheme();
+    };
+    if (typeof systemThemeQuery.addEventListener === 'function') {
+      systemThemeQuery.addEventListener('change', onChange);
+    } else if (typeof systemThemeQuery.addListener === 'function') {
+      systemThemeQuery.addListener(onChange);
+    }
   }
 
   function renderProfile() {
     var profile = state.profile;
     var team = getTeam(profile.team);
+    var signedIn = isSignedIn(profile);
+
+    el.profileButton.dataset.state = signedIn ? 'auth' : 'guest';
+    el.profileGuest.hidden = signedIn;
+    el.profileAccountChip.hidden = !signedIn;
+
     el.profileName.textContent = profile.name;
     el.profileAvatar.textContent = initials(profile.name);
+    el.profileTg.textContent = signedIn ? profile.telegram : '';
+    el.profileButton.setAttribute('aria-label', signedIn
+      ? 'Профиль: ' + profile.name + ', ' + team.name + ', ' + profile.telegram
+      : 'Войти через Telegram');
+    el.profileActionLabel.textContent = signedIn ? 'Изменить профиль:' : 'Войти через Telegram';
+
+    if (el.accountAvatar) el.accountAvatar.textContent = initials(profile.name);
+    if (el.accountName) el.accountName.textContent = profile.name;
+    if (el.accountTg) el.accountTg.textContent = signedIn ? profile.telegram : '';
+    if (el.logoutBtn) el.logoutBtn.hidden = !signedIn;
+
     applyTeam(team.id);
   }
 
@@ -1281,6 +1347,146 @@
     });
   }
 
+  function resetAuthForms() {
+    state.pendingTelegram = '';
+    state.codeRequestedAt = null;
+    state.authConfirmedCode = false;
+
+    el.telegramInput.value = '';
+    el.telegramError.hidden = true;
+    el.telegramError.textContent = '';
+    el.telegramInput.classList.remove('is-invalid');
+    el.telegramInput.setAttribute('aria-invalid', 'false');
+
+    el.codeInput.value = '';
+    el.codeError.hidden = true;
+    el.codeError.textContent = '';
+    el.codeInput.classList.remove('is-invalid');
+    el.codeInput.setAttribute('aria-invalid', 'false');
+
+    el.profileNameError.hidden = true;
+    el.profileNameError.textContent = '';
+    el.profileNameInput.classList.remove('is-invalid');
+    el.profileNameInput.setAttribute('aria-invalid', 'false');
+  }
+
+  function setFieldError(input, errorNode, message) {
+    if (errorNode) {
+      errorNode.textContent = message;
+      errorNode.hidden = false;
+    }
+    if (input) {
+      input.classList.add('is-invalid');
+      input.setAttribute('aria-invalid', 'true');
+      input.focus();
+    }
+  }
+
+  function clearFieldError(input, errorNode) {
+    if (errorNode) {
+      errorNode.hidden = true;
+      errorNode.textContent = '';
+    }
+    if (input) {
+      input.classList.remove('is-invalid');
+      input.setAttribute('aria-invalid', 'false');
+    }
+  }
+
+  function authStepCopy(step) {
+    var firstRunProfile = state.authConfirmedCode;
+
+    if (step === 'welcome') {
+      return {
+        eyebrow: 'Вход в паддок',
+        title: 'Вход в паддок',
+        desc: 'Войдите через Telegram, чтобы паддок знал, кто вы. Или продолжите как гость — прогнозы, друзья и тема останутся в браузере.'
+      };
+    }
+    if (step === 'telegram') {
+      return {
+        eyebrow: 'Шаг 1 из 3',
+        title: 'Ваш Telegram',
+        desc: 'Введите ник, на который придёт демо-код. Реального сообщения не будет: это прототип без Bot API.'
+      };
+    }
+    if (step === 'code') {
+      return {
+        eyebrow: 'Шаг 2 из 3',
+        title: 'Код подтверждения',
+        desc: 'Введите четыре цифры из сообщения @F1PaddockBot. В демо-режиме код всегда 1234.'
+      };
+    }
+    return {
+      eyebrow: firstRunProfile ? 'Шаг 3 из 3' : 'Профиль болельщика',
+      title: firstRunProfile ? 'Имя и команда' : 'Изменить профиль',
+      desc: firstRunProfile
+        ? 'Код подтверждён. Осталось выбрать имя и любимую команду — акцент интерфейса обновится сразу.'
+        : 'Смените никнейм или любимую команду — акцент интерфейса обновится сразу.'
+    };
+  }
+
+  function renderAuthStep() {
+    var step = state.authStep || 'welcome';
+    var copy = authStepCopy(step);
+    var signedIn = isSignedIn();
+
+    el.profileModal.dataset.step = step;
+    el.authWelcomeStep.hidden = step !== 'welcome';
+    el.telegramStep.hidden = step !== 'telegram';
+    el.codeStep.hidden = step !== 'code';
+    el.profileStep.hidden = step !== 'profile';
+
+    el.profileModalEyebrow.textContent = copy.eyebrow;
+    el.profileModalTitle.textContent = copy.title;
+    el.profileModalDesc.textContent = copy.desc;
+
+    // Степпер — только для первичного входа. Авторизованный редактор
+    // профиля остаётся обычным окном настроек без «1 — 2 — 3»; после
+    // подтверждения кода шаг 3 ещё относится к входу.
+    el.authStepper.hidden = step === 'welcome' ||
+      (state.modalMode === 'edit' && signedIn && !state.authConfirmedCode);
+    var order = ['telegram', 'code', 'profile'];
+    var activeIndex = order.indexOf(step);
+    $all('[data-step]', el.authStepper).forEach(function (item, index) {
+      item.classList.toggle('is-active', index === activeIndex);
+      item.classList.toggle('is-complete', index < activeIndex);
+    });
+
+    el.accountAvatar.textContent = initials(state.profile.name);
+    el.accountName.textContent = state.profile.name;
+    el.accountTg.textContent = signedIn ? state.profile.telegram : '';
+    el.logoutBtn.hidden = !signedIn;
+    el.skipProfileBtn.textContent = state.authConfirmedCode ? 'Пропустить' : 'Отмена';
+    el.saveProfileBtn.textContent = state.authConfirmedCode ? 'Сохранить профиль' : 'Сохранить';
+
+    if (step === 'profile') {
+      el.profileNameInput.value = state.profile.name === 'Гонщик' ? '' : state.profile.name;
+      renderTeamGrid();
+      applyTeam(state.selectedTeam);
+    }
+
+    window.requestAnimationFrame(function () {
+      var dialog = $('.modal__dialog', el.profileModal);
+      if (dialog) dialog.focus();
+      var target = step === 'welcome' ? el.welcomeTelegramBtn
+        : step === 'telegram' ? el.telegramInput
+        : step === 'code' ? el.codeInput
+        : el.profileNameInput;
+      if (target) {
+        target.focus();
+        if (step === 'code') target.select();
+      }
+    });
+  }
+
+  function goToAuthStep(step) {
+    state.authStep = step;
+    renderAuthStep();
+    var dialog = $('.modal__dialog', el.profileModal);
+    if (dialog) dialog.scrollTop = 0;
+  }
+
   function openProfileModal(mode) {
     if (!el.profileModal.hidden || state.modalClosing) return;
 
@@ -1291,33 +1497,17 @@
       ? focusSource
       : el.profileButton;
 
-    var onboarding = mode === 'onboarding';
-    el.profileModalEyebrow.textContent = onboarding ? 'Mock-авторизация' : 'Профиль болельщика';
-    el.profileModalTitle.textContent = onboarding ? 'Вход в паддок' : 'Изменить профиль';
-    el.profileModalDesc.textContent = onboarding
-      ? 'Представьтесь и выберите команду. Это mock-вход: без пароля, e-mail и сервера.'
-      : 'Смените никнейм или любимую команду — акцент интерфейса обновится сразу.';
-    el.skipProfileBtn.textContent = onboarding ? 'Пропустить' : 'Отмена';
-    el.saveProfileBtn.textContent = onboarding ? 'Войти в паддок' : 'Сохранить';
-
-    el.profileNameInput.value = onboarding && state.profile.name === 'Гонщик' ? '' : state.profile.name;
-    el.profileNameError.hidden = true;
-    el.profileNameInput.classList.remove('is-invalid');
-    el.profileNameInput.setAttribute('aria-invalid', 'false');
-    renderTeamGrid();
-    applyTeam(state.profile.team);
+    resetAuthForms();
+    state.authStep = mode === 'onboarding'
+      ? 'welcome'
+      : (isSignedIn() ? 'profile' : 'telegram');
 
     el.profileModal.hidden = false;
     el.profileModal.classList.remove('is-closing');
     el.profileModal.classList.add('is-open');
     document.body.classList.add('modal-open');
     setPageInert(true);
-    window.requestAnimationFrame(function () {
-      var dialog = $('.modal__dialog', el.profileModal);
-      if (dialog) dialog.focus();
-      el.profileNameInput.focus();
-      if (!onboarding) el.profileNameInput.select();
-    });
+    renderAuthStep();
   }
 
   function markOnboarded() {
@@ -1333,6 +1523,10 @@
     window.clearTimeout(modalCloseTimer);
     modalCloseTimer = null;
     state.modalMode = null;
+    state.authStep = null;
+    state.pendingTelegram = '';
+    state.codeRequestedAt = null;
+    state.authConfirmedCode = false;
 
     el.profileModal.hidden = true;
     el.profileModal.classList.remove('is-open', 'is-closing');
@@ -1384,6 +1578,97 @@
     // animationend finishes the close earlier; this timer is the fallback for
     // reduced-motion setups and throttled/occluded frames.
     modalCloseTimer = window.setTimeout(finalizeProfileClose, 240);
+  }
+
+  function handleTelegramSubmit(event) {
+    event.preventDefault();
+    var handle = normalizeTelegram(el.telegramInput.value);
+    clearFieldError(el.telegramInput, el.telegramError);
+
+    if (!handle) {
+      setFieldError(el.telegramInput, el.telegramError, 'Укажите Telegram-ник: латиница, цифры или подчёркивание.');
+      return;
+    }
+    if (handle.toLowerCase() === TELEGRAM_BOT_HANDLE.toLowerCase()) {
+      setFieldError(el.telegramInput, el.telegramError, 'Это ник демо-бота. Укажите свой Telegram-ник.');
+      return;
+    }
+    if (!TELEGRAM_HANDLE_RE.test(handle)) {
+      setFieldError(el.telegramInput, el.telegramError, 'Ник в Telegram: от 5 до 32 символов, начинается с буквы, дальше латиница, цифры или _.');
+      return;
+    }
+
+    state.pendingTelegram = handle;
+    state.codeRequestedAt = new Date().toISOString();
+    el.telegramInput.value = handle;
+    el.codeInput.value = '';
+    clearFieldError(el.codeInput, el.codeError);
+    goToAuthStep('code');
+    toast('Код отправлен в Telegram (демо: 1234).', 'info', { icon: 'telegram' });
+  }
+
+  function handleCodeSubmit(event) {
+    event.preventDefault();
+    var code = el.codeInput.value.replace(/\D/g, '').slice(0, 4);
+    clearFieldError(el.codeInput, el.codeError);
+
+    if (code.length !== 4) {
+      setFieldError(el.codeInput, el.codeError, 'Введите ровно четыре цифры.');
+      return;
+    }
+    if (code !== MOCK_TELEGRAM_CODE) {
+      el.codeInput.value = '';
+      setFieldError(el.codeInput, el.codeError, 'Неверный код. В демо-режиме код от ' + TELEGRAM_BOT_HANDLE + ' — ' + MOCK_TELEGRAM_CODE + '.');
+      el.codeInput.select();
+      return;
+    }
+    if (!state.pendingTelegram || !isValidTelegramHandle(state.pendingTelegram)) {
+      goToAuthStep('telegram');
+      return;
+    }
+
+    // Сессия фиксируется сразу после верного кода: имя и команда —
+    // следующий, необязательный шаг редактора профиля.
+    state.profile = STORE.saveTelegramAuth(state.pendingTelegram);
+    state.authConfirmedCode = true;
+    state.pendingTelegram = '';
+    state.codeRequestedAt = null;
+    state.selectedTeam = state.profile.team;
+    renderProfile();
+    goToAuthStep('profile');
+    toast('Код подтверждён. Вы вошли как ' + state.profile.telegram + '.', 'success', { icon: 'telegram' });
+  }
+
+  function handleChangeNick() {
+    el.telegramInput.value = state.pendingTelegram || '';
+    clearFieldError(el.telegramInput, el.telegramError);
+    clearFieldError(el.codeInput, el.codeError);
+    goToAuthStep('telegram');
+    toast('Измените ник и запросите код повторно (демо: 1234).', 'info', { icon: 'telegram' });
+  }
+
+  function handleGuestChoice() {
+    closeProfileModal(true);
+    toast('Вы продолжили как гость. Прогнозы, друзья и настройки останутся в браузере.', 'info', { icon: 'user' });
+  }
+
+  function handleLogout() {
+    if (!isSignedIn()) return;
+    state.profile = STORE.logoutProfile();
+    renderProfile();
+    closeProfileModal(false);
+    toast('Вы вышли из аккаунта. Прогнозы, друзья и настройки сохранены.', 'info', { icon: 'user' });
+  }
+
+  function syncAuthStepWithProfile() {
+    if (el.profileModal.hidden || state.modalClosing) return;
+    if (!isSignedIn() && state.authStep === 'profile') {
+      goToAuthStep('telegram');
+      return;
+    }
+    if (isSignedIn() && state.modalMode === 'edit' && state.authStep === 'telegram') {
+      goToAuthStep('profile');
+    }
   }
 
   /* --------------------------------------------------------------- friend */
@@ -1729,6 +2014,10 @@
     el.tzListbox = $('#tzListbox');
     el.profileButton = $('#profileButton');
     el.themeToggle = $('#themeToggle');
+    el.profileGuest = $('#profileGuest');
+    el.profileAccountChip = $('#profileAccountChip');
+    el.profileActionLabel = $('#profileActionLabel');
+    el.profileTg = $('#profileTg');
     el.profileAvatar = $('#profileAvatar');
     el.profileName = $('#profileName');
     el.profileTeam = $('#profileTeam');
@@ -1823,6 +2112,29 @@
     el.profileModalEyebrow = $('#profileModalEyebrow');
     el.profileModalTitle = $('#profileModalTitle');
     el.profileModalDesc = $('#profileModalDesc');
+    el.authStepper = $('#authStepper');
+    el.authWelcomeStep = $('#authWelcomeStep');
+    el.welcomeGuestBtn = $('#welcomeGuestBtn');
+    el.welcomeTelegramBtn = $('#welcomeTelegramBtn');
+    el.telegramStep = $('#telegramStep');
+    el.telegramForm = $('#telegramForm');
+    el.telegramInput = $('#telegramInput');
+    el.telegramError = $('#telegramError');
+    el.telegramSubmitBtn = $('#telegramSubmitBtn');
+    el.telegramGuestBtn = $('#telegramGuestBtn');
+    el.codeStep = $('#codeStep');
+    el.codeForm = $('#codeForm');
+    el.codeInput = $('#codeInput');
+    el.codeError = $('#codeError');
+    el.changeNickBtn = $('#changeNickBtn');
+    el.profileStep = $('#profileStep');
+    el.profileAccount = $('#profileAccount');
+    el.accountAvatar = $('#accountAvatar');
+    el.accountName = $('#accountName');
+    el.accountTeam = $('#accountTeam');
+    el.accountTeamName = $('#accountTeamName');
+    el.accountTg = $('#accountTg');
+    el.logoutBtn = $('#logoutBtn');
     el.profileNameInput = $('#profileNameInput');
     el.profileNameError = $('#profileNameError');
     el.teamGrid = $('#teamGrid');
@@ -1881,6 +2193,27 @@
       });
     }
 
+    el.welcomeTelegramBtn.addEventListener('click', function () {
+      goToAuthStep('telegram');
+    });
+
+    el.welcomeGuestBtn.addEventListener('click', handleGuestChoice);
+    el.telegramGuestBtn.addEventListener('click', handleGuestChoice);
+    el.telegramForm.addEventListener('submit', handleTelegramSubmit);
+    el.codeForm.addEventListener('submit', handleCodeSubmit);
+    el.changeNickBtn.addEventListener('click', handleChangeNick);
+    el.logoutBtn.addEventListener('click', handleLogout);
+
+    el.telegramInput.addEventListener('input', function () {
+      clearFieldError(el.telegramInput, el.telegramError);
+    });
+
+    el.codeInput.addEventListener('input', function () {
+      var digits = el.codeInput.value.replace(/\D/g, '').slice(0, 4);
+      if (el.codeInput.value !== digits) el.codeInput.value = digits;
+      clearFieldError(el.codeInput, el.codeError);
+    });
+
     el.skipProfileBtn.addEventListener('click', function () {
       closeProfileModal(true);
     });
@@ -1899,17 +2232,12 @@
     el.profileForm.addEventListener('submit', function (event) {
       event.preventDefault();
       var name = el.profileNameInput.value.replace(/\s+/g, ' ').trim().slice(0, 24);
+      var signedIn = isSignedIn();
 
-      el.profileNameError.hidden = true;
-      el.profileNameInput.classList.remove('is-invalid');
-      el.profileNameInput.setAttribute('aria-invalid', 'false');
+      clearFieldError(el.profileNameInput, el.profileNameError);
 
       if (name.length < 2) {
-        el.profileNameError.textContent = 'Никнейм должен содержать минимум 2 символа.';
-        el.profileNameError.hidden = false;
-        el.profileNameInput.classList.add('is-invalid');
-        el.profileNameInput.setAttribute('aria-invalid', 'true');
-        el.profileNameInput.focus();
+        setFieldError(el.profileNameInput, el.profileNameError, 'Никнейм должен содержать минимум 2 символа.');
         return;
       }
 
@@ -1918,15 +2246,16 @@
         team: state.selectedTeam,
         onboarded: true
       });
+      state.authConfirmedCode = false;
       renderProfile();
       closeProfileModal(false);
-      toast('Профиль сохранён. В паддоке: ' + state.profile.name + '.', 'success', { icon: 'user' });
+      toast(signedIn
+        ? 'Профиль сохранён. В паддоке: ' + state.profile.name + ' · ' + state.profile.telegram + '.'
+        : 'Профиль сохранён. В паддоке: ' + state.profile.name + '.', 'success', { icon: 'user' });
     });
 
     el.profileNameInput.addEventListener('input', function () {
-      el.profileNameError.hidden = true;
-      el.profileNameInput.classList.remove('is-invalid');
-      el.profileNameInput.setAttribute('aria-invalid', 'false');
+      clearFieldError(el.profileNameInput, el.profileNameError);
     });
 
     el.statusControl.addEventListener('click', function (event) {
@@ -2321,6 +2650,7 @@
       applyTeam(state.profile.team);
       renderTheme();
       renderProfile();
+      syncAuthStepWithProfile();
       renderStatic();
       renderTimezone();
       renderStatus();
@@ -2433,6 +2763,7 @@
     renderPrediction();
     renderFriends();
     bindEvents();
+    initSystemThemeListener();
     updateSourceUI();
 
     syncApi(false);

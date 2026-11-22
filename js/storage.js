@@ -122,12 +122,28 @@
     return value.replace(/\s+/g, ' ').trim().slice(0, 24);
   }
 
+  function normalizeTelegramHandle(value) {
+    if (typeof value !== 'string') return null;
+    var clean = value.trim()
+      .replace(/^https?:\/\/(?:www\.)?(?:t\.me|telegram\.me)\//i, '')
+      .replace(/^@+/, '')
+      .replace(/[^A-Za-z0-9_]/g, '')
+      .slice(0, 32);
+    if (!/^[A-Za-z][A-Za-z0-9_]{4,31}$/.test(clean)) return null;
+    // Демо-бот не может быть аккаунтом болельщика.
+    if (clean.toLowerCase() === 'f1paddockbot') return null;
+    return '@' + clean;
+  }
+
   function normalizeProfile(raw) {
     var profile = {
       name: 'Гонщик',
       team: 'ferrari',
       onboarded: false,
-      updatedAt: null
+      updatedAt: null,
+      telegram: null,
+      authMethod: null,
+      signedInAt: null
     };
     if (!raw || typeof raw !== 'object') return profile;
 
@@ -137,6 +153,15 @@
     profile.onboarded = raw.onboarded === true;
     if (typeof raw.updatedAt === 'string' && !Number.isNaN(Date.parse(raw.updatedAt))) {
       profile.updatedAt = raw.updatedAt;
+    }
+
+    // Telegram-поля необязательны: старые записи без них остаются гостевыми.
+    profile.telegram = normalizeTelegramHandle(raw.telegram);
+    if (profile.telegram) {
+      profile.authMethod = raw.authMethod === 'telegram-mock' ? raw.authMethod : 'telegram-mock';
+      if (typeof raw.signedInAt === 'string' && !Number.isNaN(Date.parse(raw.signedInAt))) {
+        profile.signedInAt = raw.signedInAt;
+      }
     }
     return profile;
   }
@@ -270,7 +295,8 @@
   function normalizePrefs(raw) {
     var timeMode = raw && raw.timeMode === 'track' ? 'track' : 'local';
     var userTimezone = raw && typeof raw.userTimezone === 'string' ? raw.userTimezone : null;
-    var theme = raw && raw.theme === 'light' ? 'light' : 'dark';
+    // null = тема ещё не выбрана вручную, приложение следует системной.
+    var theme = raw && (raw.theme === 'light' || raw.theme === 'dark') ? raw.theme : null;
     return { timeMode: timeMode, userTimezone: userTimezone, theme: theme };
   }
 
@@ -280,7 +306,10 @@
         name: 'Гонщик',
         team: 'ferrari',
         onboarded: false,
-        updatedAt: null
+        updatedAt: null,
+        telegram: null,
+        authMethod: null,
+        signedInAt: null
       }));
     }
     if (readRaw(KEYS.status) === null) {
@@ -301,7 +330,7 @@
       writeRaw(KEYS.friends, JSON.stringify(clone((DATA && DATA.defaultFriends) || [])));
     }
     if (readRaw(KEYS.prefs) === null) {
-      writeRaw(KEYS.prefs, JSON.stringify({ timeMode: 'local', userTimezone: null, theme: 'dark' }));
+      writeRaw(KEYS.prefs, JSON.stringify({ timeMode: 'local', userTimezone: null, theme: null }));
     }
     // f1_predictions и f1_selected_race создаются по действию пользователя.
   }
@@ -334,16 +363,38 @@
       };
     },
     loadProfile: function () { return normalizeProfile(readJSON(KEYS.profile, null)); },
+    isSignedIn: function (profile) {
+      var current = profile || this.loadProfile();
+      return Boolean(current && current.telegram);
+    },
     saveProfile: function (patch) {
       var current = this.loadProfile();
       var next = normalizeProfile({
         name: patch && patch.name !== undefined ? patch.name : current.name,
         team: patch && patch.team !== undefined ? patch.team : current.team,
         onboarded: patch && patch.onboarded !== undefined ? patch.onboarded : current.onboarded,
+        telegram: patch && patch.telegram !== undefined ? patch.telegram : current.telegram,
+        authMethod: patch && patch.authMethod !== undefined ? patch.authMethod : current.authMethod,
+        signedInAt: patch && patch.signedInAt !== undefined ? patch.signedInAt : current.signedInAt,
         updatedAt: nowISO()
       });
       writeRaw(KEYS.profile, JSON.stringify(next));
       return next;
+    },
+    saveTelegramAuth: function (handle) {
+      return this.saveProfile({
+        telegram: handle,
+        authMethod: 'telegram-mock',
+        signedInAt: nowISO(),
+        onboarded: true
+      });
+    },
+    logoutProfile: function () {
+      return this.saveProfile({
+        telegram: null,
+        authMethod: null,
+        signedInAt: null
+      });
     },
     loadStatus: function () { return normalizeStatus(readJSON(KEYS.status, null)); },
     saveStatus: function (mode) {
